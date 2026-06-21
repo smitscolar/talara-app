@@ -531,9 +531,9 @@ const Onboarding=({onDone,onLang})=>{
   const [step,setStep]=useState(0);
   const [imgIdx,setImgIdx]=useState(0);
   const imgs=[
-    "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=85",
-    "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=85",
-    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=85",
+    "/img-pertanian.jpg",
+    "/img-perkebunan.jpg",
+    "/img-nelayan.jpg",
   ];
   const imgLabels=["🌾 Pertanian","🌿 Perkebunan","🌊 Nelayan"];
   useEffect(()=>{
@@ -550,32 +550,32 @@ const Onboarding=({onDone,onLang})=>{
 
   if(s.type==="photo"){
     return(
-      <div style={{background:C.greenGrad,display:"flex",flexDirection:"column",alignItems:"center",padding:"36px 20px 32px",minHeight:"100vh"}}>
+      <div style={{height:"100vh",background:C.greenGrad,display:"flex",flexDirection:"column",padding:"36px 20px 28px",boxSizing:"border-box"}}>
         {/* Logo center */}
-        <div style={{display:"flex",justifyContent:"center",marginBottom:18}}>
+        <div style={{display:"flex",justifyContent:"center",marginBottom:16,flexShrink:0}}>
           <img src="/talara-icon.png" alt="TALARA"
-            style={{width:72,height:72,objectFit:"contain",filter:"drop-shadow(0 4px 12px rgba(0,0,0,0.4))"}}
+            style={{width:68,height:68,objectFit:"contain",filter:"drop-shadow(0 4px 12px rgba(0,0,0,0.4))"}}
             onError={e=>{e.target.style.display="none";}}
           />
         </div>
         {/* 3 foto berjejer */}
-        <div style={{display:"flex",width:"100%",borderRadius:18,overflow:"hidden",boxShadow:"0 8px 32px rgba(0,0,0,0.28)",height:180,marginBottom:20}}>
+        <div style={{display:"flex",borderRadius:18,overflow:"hidden",boxShadow:"0 8px 32px rgba(0,0,0,0.3)",flexShrink:0,height:175}}>
           {imgs.map((src,i)=>(
             <img key={i} src={src} alt="" style={{flex:1,width:"33.33%",height:"100%",objectFit:"cover",display:"block"}}/>
           ))}
         </div>
-        {/* Teks */}
-        <div style={{textAlign:"center",width:"100%",marginBottom:28}}>
+        {/* Teks - flex:1 agar mengisi sisa ruang secara proporsional */}
+        <div style={{textAlign:"center",flex:1,display:"flex",flexDirection:"column",justifyContent:"center",padding:"0 4px"}}>
           <div style={{color:C.white,fontWeight:900,fontSize:24,lineHeight:1.3,marginBottom:10}}>{s.title}</div>
           <div style={{color:"rgba(255,255,255,0.85)",fontSize:14,lineHeight:1.7}}>{s.sub}</div>
         </div>
-        {/* Dots + Buttons */}
-        <div style={{width:"100%",marginTop:"auto"}}>
-          <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:20}}>
+        {/* Dots + Buttons - selalu di bawah */}
+        <div style={{flexShrink:0}}>
+          <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:16}}>
             {slides.map((_,i)=><div key={i} style={{width:i===step?28:8,height:8,borderRadius:4,background:i===step?"white":"rgba(255,255,255,0.35)",transition:"all 0.3s"}}/>)}
           </div>
           <Btn full onClick={()=>setStep(1)} style={{borderRadius:16,fontSize:16,padding:"14px 0",background:C.white,color:C.green,fontWeight:800}}>{t.next}</Btn>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:14}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:12}}>
             <div onClick={onDone} style={{color:"rgba(255,255,255,0.65)",fontSize:13,cursor:"pointer"}}>{t.skip}</div>
             <button onClick={onLang} style={{background:"rgba(255,255,255,0.2)",border:"none",color:"#fff",borderRadius:20,padding:"6px 14px",fontSize:13,fontWeight:700,cursor:"pointer"}}>🌍 {LANGS[lang]?.name}</button>
           </div>
