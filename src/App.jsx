@@ -387,20 +387,20 @@ const StatusB=({status})=>{
 // WELCOME SCREEN (Shopee-style country selector)
 // ═══════════════════════════════════════════════
 const COUNTRIES=[
-  {code:"id",flag:"🇮🇩",name:"Indonesia",lang:"id"},
-  {code:"my",flag:"🇲🇾",name:"Malaysia",lang:"en"},
-  {code:"sg",flag:"🇸🇬",name:"Singapura",lang:"en"},
-  {code:"th",flag:"🇹🇭",name:"Thailand",lang:"en"},
-  {code:"ph",flag:"🇵🇭",name:"Filipina",lang:"en"},
-  {code:"vn",flag:"🇻🇳",name:"Vietnam",lang:"en"},
-  {code:"bn",flag:"🇧🇳",name:"Brunei",lang:"en"},
-  {code:"mv",flag:"🇲🇻",name:"Maldives",lang:"dv"},
-  {code:"bd",flag:"🇧🇩",name:"Bangladesh",lang:"bn"},
-  {code:"in",flag:"🇮🇳",name:"India",lang:"hi"},
-  {code:"cn",flag:"🇨🇳",name:"China",lang:"zh"},
-  {code:"sa",flag:"🇸🇦",name:"Arab Saudi",lang:"ar"},
-  {code:"fr",flag:"🇫🇷",name:"France",lang:"fr"},
-  {code:"gb",flag:"🇬🇧",name:"United Kingdom",lang:"en"},
+  {code:"id",flag:"🇮🇩",em:"🌴",name:"Indonesia",lang:"id",color:"#E8F5E9",border:"#1B6B2F"},
+  {code:"my",flag:"🇲🇾",em:"🌿",name:"Malaysia",lang:"en",color:"#E3F2FD",border:"#1565C0"},
+  {code:"sg",flag:"🇸🇬",em:"🦁",name:"Singapura",lang:"en",color:"#FCE4EC",border:"#C62828"},
+  {code:"th",flag:"🇹🇭",em:"🐘",name:"Thailand",lang:"en",color:"#F3E5F5",border:"#6A1B9A"},
+  {code:"ph",flag:"🇵🇭",em:"🌺",name:"Filipina",lang:"en",color:"#E8EAF6",border:"#283593"},
+  {code:"vn",flag:"🇻🇳",em:"⭐",name:"Vietnam",lang:"en",color:"#FFEBEE",border:"#B71C1C"},
+  {code:"bn",flag:"🇧🇳",em:"🌙",name:"Brunei",lang:"en",color:"#FFFDE7",border:"#F57F17"},
+  {code:"mv",flag:"🇲🇻",em:"🌊",name:"Maldives",lang:"dv",color:"#E0F7FA",border:"#00695C"},
+  {code:"bd",flag:"🇧🇩",em:"🎋",name:"Bangladesh",lang:"bn",color:"#E8F5E9",border:"#2E7D32"},
+  {code:"in",flag:"🇮🇳",em:"🕌",name:"India",lang:"hi",color:"#FFF3E0",border:"#E65100"},
+  {code:"cn",flag:"🇨🇳",em:"🐉",name:"China",lang:"zh",color:"#FFEBEE",border:"#C62828"},
+  {code:"sa",flag:"🇸🇦",em:"🌵",name:"Arab Saudi",lang:"ar",color:"#E8F5E9",border:"#1B5E20"},
+  {code:"fr",flag:"🇫🇷",em:"🗼",name:"France",lang:"fr",color:"#E3F2FD",border:"#0D47A1"},
+  {code:"gb",flag:"🇬🇧",em:"👑",name:"UK",lang:"en",color:"#FCE4EC",border:"#880E4F"},
 ];
 
 const WelcomeScreen=({onSelect})=>{
@@ -451,15 +451,23 @@ const WelcomeScreen=({onSelect})=>{
               onMouseLeave={()=>setHov(null)}
               style={{
                 display:"flex",flexDirection:"column",alignItems:"center",
-                background:hov===c.code?"#E8F5E9":"#fff",
-                border:`2px solid ${hov===c.code?"#1B6B2F":"#EBEBEB"}`,
-                borderRadius:14,padding:"12px 6px 10px",cursor:"pointer",
-                transition:"all 0.15s",transform:hov===c.code?"scale(1.04)":"scale(1)",
-                boxShadow:hov===c.code?"0 4px 16px rgba(27,107,47,0.18)":"0 1px 4px rgba(0,0,0,0.06)"
+                background:hov===c.code?c.color:"#fff",
+                border:`2px solid ${hov===c.code?c.border:"#EBEBEB"}`,
+                borderRadius:14,padding:"12px 4px 10px",cursor:"pointer",
+                transition:"all 0.15s",transform:hov===c.code?"scale(1.06)":"scale(1)",
+                boxShadow:hov===c.code?`0 4px 16px ${c.border}33`:"0 1px 4px rgba(0,0,0,0.06)"
               }}
             >
-              <div style={{fontSize:28,lineHeight:1,marginBottom:6}}>{c.flag}</div>
-              <div style={{fontSize:10,fontWeight:700,color:hov===c.code?"#1B6B2F":"#333",textAlign:"center",lineHeight:1.3}}>{c.name}</div>
+              {/* Lingkaran warna dengan emoji */}
+              <div style={{
+                width:44,height:44,borderRadius:"50%",
+                background:c.color,border:`2px solid ${c.border}`,
+                display:"flex",alignItems:"center",justifyContent:"center",
+                fontSize:22,marginBottom:6,boxShadow:`0 2px 8px ${c.border}33`
+              }}>
+                {c.flag||c.em}
+              </div>
+              <div style={{fontSize:10,fontWeight:700,color:hov===c.code?c.border:"#333",textAlign:"center",lineHeight:1.3}}>{c.name}</div>
             </div>
           ))}
         </div>
