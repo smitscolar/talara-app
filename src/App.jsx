@@ -418,8 +418,8 @@ const WelcomeScreen=({onSelect})=>{
 
         {/* Logo */}
         <div style={{display:"flex",justifyContent:"center",marginBottom:20}}>
-          <div style={{width:72,height:72,borderRadius:20,background:"rgba(255,255,255,0.12)",border:"2px solid rgba(255,255,255,0.2)",display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(8px)"}}>
-            <Logo size={48}/>
+          <div style={{width:110,height:110,borderRadius:28,background:"rgba(255,255,255,0.13)",border:"2px solid rgba(255,255,255,0.22)",display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(8px)"}}>
+            <Logo size={82}/>
           </div>
         </div>
 
