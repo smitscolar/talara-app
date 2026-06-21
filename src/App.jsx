@@ -387,96 +387,132 @@ const StatusB=({status})=>{
 // WELCOME SCREEN (Shopee-style country selector)
 // ═══════════════════════════════════════════════
 const COUNTRIES=[
-  {code:"id",flag:"🇮🇩",em:"🌴",name:"Indonesia",lang:"id",color:"#E8F5E9",border:"#1B6B2F"},
-  {code:"my",flag:"🇲🇾",em:"🌿",name:"Malaysia",lang:"en",color:"#E3F2FD",border:"#1565C0"},
-  {code:"sg",flag:"🇸🇬",em:"🦁",name:"Singapura",lang:"en",color:"#FCE4EC",border:"#C62828"},
-  {code:"th",flag:"🇹🇭",em:"🐘",name:"Thailand",lang:"en",color:"#F3E5F5",border:"#6A1B9A"},
-  {code:"ph",flag:"🇵🇭",em:"🌺",name:"Filipina",lang:"en",color:"#E8EAF6",border:"#283593"},
-  {code:"vn",flag:"🇻🇳",em:"⭐",name:"Vietnam",lang:"en",color:"#FFEBEE",border:"#B71C1C"},
-  {code:"bn",flag:"🇧🇳",em:"🌙",name:"Brunei",lang:"en",color:"#FFFDE7",border:"#F57F17"},
-  {code:"mv",flag:"🇲🇻",em:"🌊",name:"Maldives",lang:"dv",color:"#E0F7FA",border:"#00695C"},
-  {code:"bd",flag:"🇧🇩",em:"🎋",name:"Bangladesh",lang:"bn",color:"#E8F5E9",border:"#2E7D32"},
-  {code:"in",flag:"🇮🇳",em:"🕌",name:"India",lang:"hi",color:"#FFF3E0",border:"#E65100"},
-  {code:"cn",flag:"🇨🇳",em:"🐉",name:"China",lang:"zh",color:"#FFEBEE",border:"#C62828"},
-  {code:"sa",flag:"🇸🇦",em:"🌵",name:"Arab Saudi",lang:"ar",color:"#E8F5E9",border:"#1B5E20"},
-  {code:"fr",flag:"🇫🇷",em:"🗼",name:"France",lang:"fr",color:"#E3F2FD",border:"#0D47A1"},
-  {code:"gb",flag:"🇬🇧",em:"👑",name:"UK",lang:"en",color:"#FCE4EC",border:"#880E4F"},
+  {code:"id",flag:"🇮🇩",name:"Indonesia",lang:"id",color:"#E8F5E9",border:"#1B6B2F"},
+  {code:"my",flag:"🇲🇾",name:"Malaysia",lang:"en",color:"#E3F2FD",border:"#1565C0"},
+  {code:"sg",flag:"🇸🇬",name:"Singapura",lang:"en",color:"#FCE4EC",border:"#C62828"},
+  {code:"th",flag:"🇹🇭",name:"Thailand",lang:"en",color:"#F3E5F5",border:"#6A1B9A"},
+  {code:"ph",flag:"🇵🇭",name:"Filipina",lang:"en",color:"#E8EAF6",border:"#283593"},
+  {code:"vn",flag:"🇻🇳",name:"Vietnam",lang:"en",color:"#FFEBEE",border:"#B71C1C"},
+  {code:"bn",flag:"🇧🇳",name:"Brunei",lang:"en",color:"#FFFDE7",border:"#F57F17"},
+  {code:"mv",flag:"🇲🇻",name:"Maldives",lang:"dv",color:"#E0F7FA",border:"#00695C"},
+  {code:"bd",flag:"🇧🇩",name:"Bangladesh",lang:"bn",color:"#E8F5E9",border:"#2E7D32"},
+  {code:"in",flag:"🇮🇳",name:"India",lang:"hi",color:"#FFF3E0",border:"#E65100"},
+  {code:"cn",flag:"🇨🇳",name:"China",lang:"zh",color:"#FFEBEE",border:"#C62828"},
+  {code:"sa",flag:"🇸🇦",name:"Arab Saudi",lang:"ar",color:"#E8F5E9",border:"#1B5E20"},
+  {code:"fr",flag:"🇫🇷",name:"France",lang:"fr",color:"#E3F2FD",border:"#0D47A1"},
+  {code:"gb",flag:"🇬🇧",name:"United Kingdom",lang:"en",color:"#FCE4EC",border:"#880E4F"},
 ];
 
 const WelcomeScreen=({onSelect})=>{
   const [hov,setHov]=useState(null);
+  const [pressed,setPressed]=useState(null);
   return(
-    <div style={{minHeight:"100vh",background:"#F5F5F5",display:"flex",flexDirection:"column"}}>
-      {/* Header banner */}
-      <div style={{background:"linear-gradient(135deg,#1B6B2F 0%,#2E8B46 50%,#3DAA5C 100%)",padding:"32px 20px 28px",textAlign:"center",position:"relative",overflow:"hidden"}}>
-        {/* Dekorasi lingkaran */}
-        <div style={{position:"absolute",top:-40,right:-40,width:130,height:130,borderRadius:"50%",background:"rgba(255,255,255,0.08)"}}/>
-        <div style={{position:"absolute",bottom:-30,left:-20,width:90,height:90,borderRadius:"50%",background:"rgba(255,255,255,0.06)"}}/>
-        {/* Ilustrasi emoji petani */}
-        <div style={{display:"flex",justifyContent:"center",gap:10,marginBottom:14,fontSize:36}}>
-          <span style={{animationName:"bounce",animationDuration:"1.8s",animationIterationCount:"infinite",display:"inline-block"}}>👨‍🌾</span>
-          <span style={{animationName:"bounce",animationDuration:"1.8s",animationDelay:"0.3s",animationIterationCount:"infinite",display:"inline-block"}}>🌾</span>
-          <span style={{animationName:"bounce",animationDuration:"1.8s",animationDelay:"0.6s",animationIterationCount:"infinite",display:"inline-block"}}>🐟</span>
-          <span style={{animationName:"bounce",animationDuration:"1.8s",animationDelay:"0.9s",animationIterationCount:"infinite",display:"inline-block"}}>🌿</span>
-          <span style={{animationName:"bounce",animationDuration:"1.8s",animationDelay:"1.2s",animationIterationCount:"infinite",display:"inline-block"}}>👩‍🌾</span>
+    <div style={{minHeight:"100vh",background:"#0D2137",display:"flex",flexDirection:"column",fontFamily:"'Inter','Segoe UI',system-ui,sans-serif"}}>
+
+      {/* ── HERO ── */}
+      <div style={{background:"linear-gradient(160deg,#0D2137 0%,#1B6B2F 60%,#2E8B46 100%)",padding:"48px 24px 36px",textAlign:"center",position:"relative",overflow:"hidden",flexShrink:0}}>
+        {/* Dekorasi background circles */}
+        <div style={{position:"absolute",top:-60,right:-60,width:200,height:200,borderRadius:"50%",background:"rgba(255,255,255,0.04)"}}/>
+        <div style={{position:"absolute",bottom:-40,left:-40,width:140,height:140,borderRadius:"50%",background:"rgba(255,255,255,0.04)"}}/>
+        <div style={{position:"absolute",top:"30%",left:-30,width:80,height:80,borderRadius:"50%",background:"rgba(255,215,0,0.07)"}}/>
+
+        {/* Logo */}
+        <div style={{display:"flex",justifyContent:"center",marginBottom:20}}>
+          <div style={{width:72,height:72,borderRadius:20,background:"rgba(255,255,255,0.12)",border:"2px solid rgba(255,255,255,0.2)",display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(8px)"}}>
+            <Logo size={48}/>
+          </div>
         </div>
-        <Logo size={56}/>
-        <div style={{color:"#fff",fontWeight:900,fontSize:22,marginTop:10,letterSpacing:0.5}}>Selamat Datang di TALARA</div>
-        <div style={{color:"rgba(255,255,255,0.82)",fontSize:13,marginTop:6,lineHeight:1.6}}>
-          Platform agrikultur terlengkap.<br/>Pilih negara atau wilayah Anda.
+
+        {/* Brand name */}
+        <div style={{color:"#fff",fontWeight:900,fontSize:32,letterSpacing:2,marginBottom:4}}>TALARA</div>
+        <div style={{color:"rgba(255,255,255,0.5)",fontSize:11,letterSpacing:3,fontWeight:600,marginBottom:20,textTransform:"uppercase"}}>Farm · Plantation · Fishery</div>
+
+        {/* Tagline */}
+        <div style={{color:"rgba(255,255,255,0.92)",fontSize:15,fontWeight:500,lineHeight:1.6,marginBottom:8}}>
+          Super-App Pertanian & Kelautan Indonesia
+        </div>
+        <div style={{display:"inline-block",background:"rgba(255,215,0,0.15)",border:"1px solid rgba(255,215,0,0.3)",borderRadius:20,padding:"4px 16px",fontSize:11,color:"#FFD700",fontWeight:700,letterSpacing:1}}>
+          FROM NATURE TO THE WORLD 🌍
         </div>
       </div>
 
-      {/* Info strip */}
-      <div style={{background:"#fff",borderBottom:"1px solid #EBEBEB",padding:"10px 20px",display:"flex",justifyContent:"space-around",textAlign:"center"}}>
-        {[["🛡️","Transaksi Aman"],["🤝","Penjual Tepercaya"],["🆓","Gratis Daftar"]].map(([em,l])=>(
-          <div key={l} style={{flex:1}}>
-            <div style={{fontSize:18}}>{em}</div>
-            <div style={{fontSize:9,color:"#555",fontWeight:600,marginTop:2}}>{l}</div>
+      {/* ── TRUST BADGES ── */}
+      <div style={{background:"#fff",padding:"14px 20px",display:"flex",justifyContent:"space-around",borderBottom:"1px solid #F0F0F0"}}>
+        {[
+          {em:"🛡️",l:"Transaksi Aman",sub:"Terproteksi"},
+          {em:"🤝",l:"Penjual Tepercaya",sub:"Terverifikasi"},
+          {em:"✅",l:"Gratis Daftar",sub:"Tanpa Biaya"},
+        ].map(b=>(
+          <div key={b.l} style={{flex:1,textAlign:"center"}}>
+            <div style={{fontSize:20,marginBottom:2}}>{b.em}</div>
+            <div style={{fontSize:10,fontWeight:700,color:"#1B6B2F"}}>{b.l}</div>
+            <div style={{fontSize:9,color:"#aaa"}}>{b.sub}</div>
           </div>
         ))}
       </div>
 
-      {/* Pilih negara */}
-      <div style={{padding:"16px 16px 24px",flex:1}}>
-        <div style={{fontSize:13,fontWeight:700,color:"#444",marginBottom:12,textAlign:"center"}}>Pilih Negara / Wilayah</div>
+      {/* ── PILIH NEGARA ── */}
+      <div style={{background:"#F8F9FA",flex:1,padding:"20px 16px 32px"}}>
+        {/* Section header */}
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:16}}>
+          <div style={{width:3,height:18,borderRadius:2,background:"#1B6B2F"}}/>
+          <div style={{fontSize:14,fontWeight:800,color:"#1a1a1a"}}>Pilih Negara / Wilayah</div>
+          <div style={{flex:1,height:1,background:"#E5E7EB",marginLeft:4}}/>
+        </div>
+
+        {/* Grid negara */}
         <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10}}>
-          {COUNTRIES.map(c=>(
-            <div
-              key={c.code}
-              onClick={()=>onSelect(c)}
-              onTouchStart={()=>setHov(c.code)}
-              onTouchEnd={()=>setHov(null)}
-              onMouseEnter={()=>setHov(c.code)}
-              onMouseLeave={()=>setHov(null)}
-              style={{
-                display:"flex",flexDirection:"column",alignItems:"center",
-                background:hov===c.code?c.color:"#fff",
-                border:`2px solid ${hov===c.code?c.border:"#EBEBEB"}`,
-                borderRadius:14,padding:"12px 4px 10px",cursor:"pointer",
-                transition:"all 0.15s",transform:hov===c.code?"scale(1.06)":"scale(1)",
-                boxShadow:hov===c.code?`0 4px 16px ${c.border}33`:"0 1px 4px rgba(0,0,0,0.06)"
-              }}
-            >
-              {/* Lingkaran warna dengan emoji */}
-              <div style={{
-                width:44,height:44,borderRadius:"50%",
-                background:c.color,border:`2px solid ${c.border}`,
-                display:"flex",alignItems:"center",justifyContent:"center",
-                fontSize:22,marginBottom:6,boxShadow:`0 2px 8px ${c.border}33`
-              }}>
-                {c.flag||c.em}
+          {COUNTRIES.map(c=>{
+            const isP=pressed===c.code;
+            return(
+              <div
+                key={c.code}
+                onClick={()=>onSelect(c)}
+                onTouchStart={()=>setPressed(c.code)}
+                onTouchEnd={()=>{setPressed(null);}}
+                onMouseEnter={()=>setHov(c.code)}
+                onMouseLeave={()=>setHov(null)}
+                style={{
+                  display:"flex",flexDirection:"column",alignItems:"center",
+                  background:isP||hov===c.code?"#fff":"#fff",
+                  border:`1.5px solid ${isP||hov===c.code?c.border:"#E5E7EB"}`,
+                  borderRadius:16,padding:"14px 4px 10px",cursor:"pointer",
+                  transition:"all 0.12s",
+                  transform:isP?"scale(0.95)":(hov===c.code?"scale(1.03)":"scale(1)"),
+                  boxShadow:isP?`0 2px 8px ${c.border}44`:(hov===c.code?`0 6px 20px ${c.border}33`:"0 1px 4px rgba(0,0,0,0.06)"),
+                }}
+              >
+                {/* Flag dalam lingkaran */}
+                <div style={{
+                  width:46,height:46,borderRadius:"50%",
+                  background:c.color,
+                  border:`2.5px solid ${c.border}`,
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  fontSize:24,marginBottom:8,
+                  boxShadow:`0 3px 10px ${c.border}33`,
+                  overflow:"hidden",
+                }}>
+                  {c.flag}
+                </div>
+                {/* Nama negara */}
+                <div style={{
+                  fontSize:9,fontWeight:700,
+                  color:hov===c.code?c.border:"#333",
+                  textAlign:"center",lineHeight:1.3,
+                  letterSpacing:0.2,
+                }}>
+                  {c.name}
+                </div>
               </div>
-              <div style={{fontSize:10,fontWeight:700,color:hov===c.code?c.border:"#333",textAlign:"center",lineHeight:1.3}}>{c.name}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
-      {/* Footer */}
-      <div style={{textAlign:"center",padding:"14px 20px",background:"#fff",borderTop:"1px solid #EBEBEB"}}>
-        <div style={{fontSize:11,color:"#999"}}>TALARA © 2026 · Farm · Plantation · Fishery</div>
-        <div style={{fontSize:10,color:"#BBB",marginTop:2}}>From Nature To The World 🌍</div>
+      {/* ── FOOTER ── */}
+      <div style={{background:"#0D2137",padding:"16px 20px",textAlign:"center"}}>
+        <div style={{fontSize:11,color:"rgba(255,255,255,0.4)",letterSpacing:0.5}}>TALARA © 2026 · All Rights Reserved</div>
+        <div style={{fontSize:9,color:"rgba(255,255,255,0.25)",marginTop:3,letterSpacing:0.5}}>Farm · Plantation · Aquaculture · Fishery</div>
       </div>
     </div>
   );
