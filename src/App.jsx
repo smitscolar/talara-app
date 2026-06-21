@@ -531,10 +531,11 @@ const Onboarding=({onDone,onLang})=>{
   const {t,lang}=useLang();
   const [step,setStep]=useState(0);
   const [imgIdx,setImgIdx]=useState(0);
+  // Foto onboarding - PERMANEN di repo, tidak akan berubah
   const imgs=[
-    "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=85",
-    "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=85",
-    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=85",
+    "/onboard-pertanian.jpg",   // sawah padi sunset
+    "/onboard-perkebunan.jpg",  // kebun kopi + kakao
+    "/onboard-nelayan.jpg",     // pasar nelayan Indonesia
   ];
   const imgLabels=["🌾 Pertanian","🌿 Perkebunan","🌊 Nelayan"];
   useEffect(()=>{
