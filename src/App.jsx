@@ -198,8 +198,8 @@ const Onboarding=({onDone})=>{
       <div style={{textAlign:"center"}}>
         <Logo size={80}/>
         {s.imgs
-          ?<div style={{display:"flex",gap:10,margin:"20px 0 12px",justifyContent:"center"}}>
-            {s.imgs.map((src,i)=><img key={i} src={src} alt="" style={{width:90,height:120,objectFit:"cover",borderRadius:14,boxShadow:"0 4px 16px rgba(0,0,0,0.25)"}}/>)}
+          ?<div style={{display:"flex",gap:0,margin:"20px 0 12px",justifyContent:"center",borderRadius:16,overflow:"hidden",boxShadow:"0 6px 24px rgba(0,0,0,0.3)"}}>
+            {s.imgs.map((src,i)=><img key={i} src={src} alt="" style={{width:90,height:120,objectFit:"cover",display:"block"}}/>)}
           </div>
           :<div style={{fontSize:70,margin:"20px 0 12px"}}>{s.em}</div>
         }
