@@ -1,8 +1,202 @@
 import React, { useState, useRef, useEffect } from "react";
 
 // ═══════════════════════════════════════════════
-// CONSTANTS & DATA
+// MULTI LANGUAGE SYSTEM
 // ═══════════════════════════════════════════════
+const LANGS={
+  id:{flag:"🇮🇩",name:"Indonesia",label:"Bahasa Indonesia"},
+  en:{flag:"🇬🇧",name:"English",label:"English"},
+  zh:{flag:"🇨🇳",name:"中文",label:"中文 (Chinese)"},
+  ar:{flag:"🇸🇦",name:"العربية",label:"العربية (Arabic)"},
+  dv:{flag:"🇲🇻",name:"ދިވެހި",label:"ދިވެހި (Maldives)"},
+  bn:{flag:"🇧🇩",name:"বাংলা",label:"বাংলা (Bangladesh)"},
+  hi:{flag:"🇮🇳",name:"हिंदी",label:"हिंदी (India)"},
+  fr:{flag:"🇫🇷",name:"Français",label:"Français (French)"},
+};
+
+const T={
+  id:{
+    welcome:"Selamat Datang di TALARA",welcome_sub:"Super-app pertanian, perkebunan & nelayan terlengkap. Indonesia untuk Dunia.",
+    marketplace:"Marketplace Tanpa Tengkulak",marketplace_sub:"Jual beli langsung. Petani dapat harga terbaik.",
+    talpay_title:"TALPAY — Uang Digital TALARA",talpay_sub:"1 TALPAY = Rp 500. Aman, tercatat, mudah.",
+    next:"Lanjut →",skip:"Lewati",start:"🚀 Mulai Gunakan TALARA",
+    search:"Cari produk tani, kebun, nelayan, pancing...",
+    balance:"Saldo TALPAY Saya",manage:"Kelola ›",
+    buy:"Beli",live:"Live",sell:"Jual",price:"Harga",weather:"Cuaca",
+    promo_title:"🎉 Promo Ongkir Gratis!",promo_sub:"Semua produk pertanian hari ini",promo_until:"Berlaku s/d 23:59",
+    live_now:"🔴 Live Sekarang",see_all:"Lihat Semua",
+    latest:"Produk Terbaru",category:"Kategori",
+    add_cart:"Tambah",cart_empty:"Keranjang Kosong",cart_empty_sub:"Yuk belanja produk segar!",
+    checkout:"Bayar Sekarang",total:"Total",
+    sold:"terjual",stock:"Stok",
+    home:"Beranda",market:"Pasar",chat:"Chat",profile:"Profil",
+    notif:"Notifikasi",orders:"Pesanan",
+    all:"Semua",farming:"Pertanian",plantation:"Perkebunan",fishery:"Nelayan",equipment:"Peralatan",fishing:"Pancing",
+    topup:"Top Up",withdraw:"Tarik Tunai",transfer:"Transfer",history:"Riwayat",
+  },
+  en:{
+    welcome:"Welcome to TALARA",welcome_sub:"The most complete super-app for farming, plantation & fishery. Indonesia for the World.",
+    marketplace:"Direct Marketplace",marketplace_sub:"Buy & sell directly. Farmers get the best price.",
+    talpay_title:"TALPAY — TALARA Digital Currency",talpay_sub:"1 TALPAY = Rp 500. Safe, recorded, easy.",
+    next:"Next →",skip:"Skip",start:"🚀 Start Using TALARA",
+    search:"Search farming, plantation, fishery products...",
+    balance:"My TALPAY Balance",manage:"Manage ›",
+    buy:"Buy",live:"Live",sell:"Sell",price:"Price",weather:"Weather",
+    promo_title:"🎉 Free Shipping Promo!",promo_sub:"All farming products today",promo_until:"Valid until 23:59",
+    live_now:"🔴 Live Now",see_all:"See All",
+    latest:"Latest Products",category:"Category",
+    add_cart:"Add",cart_empty:"Cart Empty",cart_empty_sub:"Start shopping fresh products!",
+    checkout:"Checkout Now",total:"Total",
+    sold:"sold",stock:"Stock",
+    home:"Home",market:"Market",chat:"Chat",profile:"Profile",
+    notif:"Notifications",orders:"Orders",
+    all:"All",farming:"Farming",plantation:"Plantation",fishery:"Fishery",equipment:"Equipment",fishing:"Fishing",
+    topup:"Top Up",withdraw:"Withdraw",transfer:"Transfer",history:"History",
+  },
+  zh:{
+    welcome:"欢迎来到 TALARA",welcome_sub:"印尼最完整的农业、种植园和渔业超级应用。印尼走向世界。",
+    marketplace:"无中间商市场",marketplace_sub:"直接买卖。农民获得最佳价格。",
+    talpay_title:"TALPAY — TALARA数字货币",talpay_sub:"1 TALPAY = Rp 500。安全、有记录、简便。",
+    next:"下一步 →",skip:"跳过",start:"🚀 开始使用 TALARA",
+    search:"搜索农业、种植园、渔业产品...",
+    balance:"我的 TALPAY 余额",manage:"管理 ›",
+    buy:"购买",live:"直播",sell:"出售",price:"价格",weather:"天气",
+    promo_title:"🎉 免运费促销！",promo_sub:"今日所有农产品",promo_until:"有效期至 23:59",
+    live_now:"🔴 正在直播",see_all:"查看全部",
+    latest:"最新产品",category:"分类",
+    add_cart:"加入",cart_empty:"购物车空",cart_empty_sub:"开始购买新鲜产品！",
+    checkout:"立即结账",total:"合计",
+    sold:"已售",stock:"库存",
+    home:"首页",market:"市场",chat:"聊天",profile:"个人",
+    notif:"通知",orders:"订单",
+    all:"全部",farming:"农业",plantation:"种植",fishery:"渔业",equipment:"设备",fishing:"钓鱼",
+    topup:"充值",withdraw:"提现",transfer:"转账",history:"历史",
+  },
+  ar:{
+    welcome:"مرحباً بك في TALARA",welcome_sub:"التطبيق الشامل للزراعة والمزارع والصيد في إندونيسيا. إندونيسيا للعالم.",
+    marketplace:"سوق بلا وسطاء",marketplace_sub:"بيع وشراء مباشر. المزارعون يحصلون على أفضل سعر.",
+    talpay_title:"TALPAY — عملة TALARA الرقمية",talpay_sub:"1 TALPAY = 500 روبية. آمن، موثق، سهل.",
+    next:"التالي →",skip:"تخطي",start:"🚀 ابدأ استخدام TALARA",
+    search:"ابحث عن منتجات الزراعة والصيد...",
+    balance:"رصيد TALPAY",manage:"إدارة ›",
+    buy:"شراء",live:"مباشر",sell:"بيع",price:"السعر",weather:"الطقس",
+    promo_title:"🎉 شحن مجاني!",promo_sub:"جميع المنتجات الزراعية اليوم",promo_until:"صالح حتى 23:59",
+    live_now:"🔴 مباشر الآن",see_all:"عرض الكل",
+    latest:"أحدث المنتجات",category:"الفئة",
+    add_cart:"أضف",cart_empty:"السلة فارغة",cart_empty_sub:"تسوق المنتجات الطازجة!",
+    checkout:"الدفع الآن",total:"المجموع",
+    sold:"مُباع",stock:"المخزون",
+    home:"الرئيسية",market:"السوق",chat:"دردشة",profile:"الملف",
+    notif:"الإشعارات",orders:"الطلبات",
+    all:"الكل",farming:"زراعة",plantation:"مزارع",fishery:"صيد",equipment:"معدات",fishing:"صيد سمك",
+    topup:"شحن",withdraw:"سحب",transfer:"تحويل",history:"السجل",
+  },
+  dv:{
+    welcome:"TALARA އަށް ތިޔަ ބޭފުޅުން ވަދެވަޑައިގަތުމަށް ޚޮޝްއާމަދީދު",welcome_sub:"ދަނޑުވެރިކަމާއި ކަނޑުމަސްވެރިކަމުގެ ސުޕަ-އެޕް.",
+    marketplace:"ވިޔަފާރި ބާޒާރު",marketplace_sub:"ސީދާ ވިއްކުން. ދަނޑުވެރިންނަށް ހެޔޮ އަގު.",
+    talpay_title:"TALPAY — ޑިޖިޓަލް ފައިސާ",talpay_sub:"1 TALPAY = Rp 500.",
+    next:"ކުރިޔަށް →",skip:"ދޫކޮށްލާ",start:"🚀 TALARA ބޭނުންކުރަން ފަށާ",
+    search:"ދަނޑުވެރިކަމުގެ ބާޒާރު ހޯދާ...",
+    balance:"TALPAY ބެލެންސް",manage:"ބަލަހައްޓާ ›",
+    buy:"ގަންނާ",live:"ލައިވް",sell:"ވިއްކާ",price:"އަގު",weather:"މޫސުން",
+    promo_title:"🎉 ހިލޭ ޑެލިވަރީ!",promo_sub:"މިއަދު ހުރިހާ ދަނޑު ތަކެތި",promo_until:"23:59 ގެ ނިޔަލަށް",
+    live_now:"🔴 ލައިވް ޝޯ",see_all:"ހުރިހާ ބަލާ",
+    latest:"އެންމެ ފަހުގެ ތަކެތި",category:"ބާވަތް",
+    add_cart:"ލިސްޓަށް",cart_empty:"ކާޓު ހުހަށް",cart_empty_sub:"ތާޒާ ތަކެތި ގަންނަން ފަށާ!",
+    checkout:"ފައިސާ ދައްކާ",total:"ޖުމްލަ",
+    sold:"ވިކިފައި",stock:"ސްޓޮކް",
+    home:"ގެ",market:"ބާޒާރު",chat:"ޗެޓް",profile:"ޕްރޮފައިލް",
+    notif:"ނޯޓިފިކޭޝަން",orders:"އޯޑަރ",
+    all:"ހުރިހާ",farming:"ދަނޑުވެރިކަން",plantation:"ދަނޑު",fishery:"ކަނޑުމަސް",equipment:"ސާމާނު",fishing:"މަސްވެރިކަން",
+    topup:"ޗާޖު",withdraw:"ވިތްޑްރޯ",transfer:"ޓްރާންސްފަރ",history:"ތާރީހް",
+  },
+  bn:{
+    welcome:"TALARA-তে স্বাগতম",welcome_sub:"কৃষি, বাগান ও মৎস্যজীবীদের জন্য সেরা সুপার-অ্যাপ। ইন্দোনেশিয়া থেকে বিশ্বে।",
+    marketplace:"মধ্যস্থতাকারীমুক্ত বাজার",marketplace_sub:"সরাসরি কেনাবেচা। কৃষকরা সেরা দাম পান।",
+    talpay_title:"TALPAY — ডিজিটাল মুদ্রা",talpay_sub:"১ TALPAY = Rp ৫০০। নিরাপদ, রেকর্ডযুক্ত, সহজ।",
+    next:"পরবর্তী →",skip:"এড়িয়ে যান",start:"🚀 TALARA ব্যবহার শুরু করুন",
+    search:"কৃষি, বাগান, মৎস্য পণ্য খুঁজুন...",
+    balance:"আমার TALPAY ব্যালেন্স",manage:"পরিচালনা ›",
+    buy:"কিনুন",live:"লাইভ",sell:"বিক্রি",price:"মূল্য",weather:"আবহাওয়া",
+    promo_title:"🎉 বিনামূল্যে শিপিং!",promo_sub:"আজ সব কৃষি পণ্য",promo_until:"২৩:৫৯ পর্যন্ত বৈধ",
+    live_now:"🔴 এখন লাইভ",see_all:"সব দেখুন",
+    latest:"সর্বশেষ পণ্য",category:"বিভাগ",
+    add_cart:"যোগ করুন",cart_empty:"কার্ট খালি",cart_empty_sub:"তাজা পণ্য কেনাকাটা শুরু করুন!",
+    checkout:"এখনই চেকআউট",total:"মোট",
+    sold:"বিক্রি হয়েছে",stock:"স্টক",
+    home:"হোম",market:"বাজার",chat:"চ্যাট",profile:"প্রোফাইল",
+    notif:"বিজ্ঞপ্তি",orders:"অর্ডার",
+    all:"সব",farming:"কৃষি",plantation:"বাগান",fishery:"মৎস্য",equipment:"যন্ত্রপাতি",fishing:"মাছ ধরা",
+    topup:"টপআপ",withdraw:"উত্তোলন",transfer:"স্থানান্তর",history:"ইতিহাস",
+  },
+  hi:{
+    welcome:"TALARA में आपका स्वागत है",welcome_sub:"खेती, बागान और मछुआरों के लिए सबसे पूर्ण सुपर-ऐप। इंडोनेशिया से विश्व तक।",
+    marketplace:"बिचौलिए रहित बाज़ार",marketplace_sub:"सीधी खरीद-बिक्री। किसानों को सबसे अच्छा दाम मिलता है।",
+    talpay_title:"TALPAY — डिजिटल मुद्रा",talpay_sub:"1 TALPAY = Rp 500। सुरक्षित, दर्ज, आसान।",
+    next:"आगे →",skip:"छोड़ें",start:"🚀 TALARA उपयोग शुरू करें",
+    search:"खेती, बागान, मछली उत्पाद खोजें...",
+    balance:"मेरा TALPAY बैलेंस",manage:"प्रबंधित करें ›",
+    buy:"खरीदें",live:"लाइव",sell:"बेचें",price:"कीमत",weather:"मौसम",
+    promo_title:"🎉 मुफ्त शिपिंग प्रोमो!",promo_sub:"आज सभी कृषि उत्पाद",promo_until:"23:59 तक मान्य",
+    live_now:"🔴 अभी लाइव",see_all:"सभी देखें",
+    latest:"नवीनतम उत्पाद",category:"श्रेणी",
+    add_cart:"जोड़ें",cart_empty:"कार्ट खाली है",cart_empty_sub:"ताज़े उत्पाद खरीदना शुरू करें!",
+    checkout:"अभी चेकआउट करें",total:"कुल",
+    sold:"बिका",stock:"स्टॉक",
+    home:"होम",market:"बाज़ार",chat:"चैट",profile:"प्रोफ़ाइल",
+    notif:"सूचनाएं",orders:"ऑर्डर",
+    all:"सभी",farming:"खेती",plantation:"बागान",fishery:"मछली",equipment:"उपकरण",fishing:"मछली पकड़ना",
+    topup:"टॉप अप",withdraw:"निकासी",transfer:"स्थानांतरण",history:"इतिहास",
+  },
+  fr:{
+    welcome:"Bienvenue sur TALARA",welcome_sub:"La super-application la plus complète pour l'agriculture, les plantations et la pêche. Indonésie pour le Monde.",
+    marketplace:"Marché Sans Intermédiaires",marketplace_sub:"Achat-vente direct. Les agriculteurs obtiennent le meilleur prix.",
+    talpay_title:"TALPAY — Monnaie Numérique TALARA",talpay_sub:"1 TALPAY = Rp 500. Sécurisé, enregistré, facile.",
+    next:"Suivant →",skip:"Passer",start:"🚀 Commencer TALARA",
+    search:"Rechercher produits agricoles, plantation, pêche...",
+    balance:"Mon Solde TALPAY",manage:"Gérer ›",
+    buy:"Acheter",live:"En direct",sell:"Vendre",price:"Prix",weather:"Météo",
+    promo_title:"🎉 Livraison Gratuite!",promo_sub:"Tous les produits agricoles aujourd'hui",promo_until:"Valable jusqu'à 23:59",
+    live_now:"🔴 En Direct",see_all:"Voir Tout",
+    latest:"Derniers Produits",category:"Catégorie",
+    add_cart:"Ajouter",cart_empty:"Panier Vide",cart_empty_sub:"Commencez à acheter des produits frais!",
+    checkout:"Payer Maintenant",total:"Total",
+    sold:"vendu",stock:"Stock",
+    home:"Accueil",market:"Marché",chat:"Chat",profile:"Profil",
+    notif:"Notifications",orders:"Commandes",
+    all:"Tout",farming:"Agriculture",plantation:"Plantation",fishery:"Pêche",equipment:"Équipement",fishing:"Pêche à la ligne",
+    topup:"Recharger",withdraw:"Retirer",transfer:"Transférer",history:"Historique",
+  },
+};
+
+const LangCtx=React.createContext({lang:"id",t:T.id,setLang:()=>{}});
+const useLang=()=>React.useContext(LangCtx);
+
+const LangPicker=({onClose})=>{
+  const {lang,setLang}=useLang();
+  return(
+    <div style={{position:"fixed",inset:0,zIndex:9999,display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+      <div onClick={onClose} style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.5)"}}/>
+      <div style={{position:"relative",background:"#fff",borderRadius:"24px 24px 0 0",padding:"20px 16px 40px",maxHeight:"80vh",overflowY:"auto"}}>
+        <div style={{width:40,height:4,background:"#e0e0e0",borderRadius:4,margin:"0 auto 18px"}}/>
+        <div style={{fontWeight:900,fontSize:17,color:C.dark,marginBottom:16,textAlign:"center"}}>🌍 Pilih Bahasa / Select Language</div>
+        {Object.entries(LANGS).map(([code,lng])=>(
+          <div key={code} onClick={()=>{setLang(code);onClose();}}
+            style={{display:"flex",alignItems:"center",gap:14,padding:"14px 16px",borderRadius:14,cursor:"pointer",marginBottom:6,background:lang===code?C.greenPale:"#f8f8f8",border:`2px solid ${lang===code?C.green:"transparent"}`,transition:"all 0.2s"}}>
+            <span style={{fontSize:28}}>{lng.flag}</span>
+            <div>
+              <div style={{fontWeight:700,fontSize:15,color:C.dark}}>{lng.name}</div>
+              <div style={{fontSize:12,color:C.mid}}>{lng.label}</div>
+            </div>
+            {lang===code&&<span style={{marginLeft:"auto",color:C.green,fontSize:20,fontWeight:900}}>✓</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
 const C = {
   green:"#1B6B2F",greenMid:"#2E9B3F",greenLight:"#4CAF50",greenPale:"#E8F5E9",
   greenGrad:"linear-gradient(135deg,#1B6B2F,#2E9B3F)",
@@ -185,20 +379,21 @@ const StatusB=({status})=>{
 // ═══════════════════════════════════════════════
 // ONBOARDING
 // ═══════════════════════════════════════════════
-const Onboarding=({onDone})=>{
+const Onboarding=({onDone,onLang})=>{
+  const {t,lang}=useLang();
   const [step,setStep]=useState(0);
   const [imgIdx,setImgIdx]=useState(0);
   const imgs=["/img-pertanian.jpg","/img-perkebunan.jpg","/img-nelayan.jpg"];
   const imgLabels=["🌾 Pertanian","🌿 Perkebunan","🌊 Nelayan"];
   useEffect(()=>{
     if(step!==0)return;
-    const t=setInterval(()=>setImgIdx(i=>(i+1)%3),2000);
-    return()=>clearInterval(t);
+    const timer=setInterval(()=>setImgIdx(i=>(i+1)%3),2000);
+    return()=>clearInterval(timer);
   },[step]);
   const slides=[
-    {type:"photo",title:"Selamat Datang di TALARA",sub:"Super-app pertanian, perkebunan & nelayan terlengkap.\nIndonesia untuk Dunia."},
-    {type:"text",em:"🛒",title:"Marketplace Tanpa Tengkulak",sub:"Jual beli langsung. Petani dapat harga terbaik. Pembeli dapat produk segar harga wajar.",bg:C.blueGrad,icons:["🌾","➡️","🏠","🍽️","🚢"]},
-    {type:"text",em:"💰",title:"TALPAY — Uang Digital TALARA",sub:"1 TALPAY = Rp 500. Aman, tercatat, mudah. Topup dari bank & minimarket mana saja.",bg:C.goldGrad,icons:["🏦","🏧","🏪","📱","✅"]},
+    {type:"photo",title:t.welcome,sub:t.welcome_sub},
+    {type:"text",em:"🛒",title:t.marketplace,sub:t.marketplace_sub,bg:C.blueGrad,icons:["🌾","➡️","🏠","🍽️","🚢"]},
+    {type:"text",em:"💰",title:t.talpay_title,sub:t.talpay_sub,bg:C.goldGrad,icons:["🏦","🏧","🏪","📱","✅"]},
   ];
   const s=slides[step];
 
@@ -220,8 +415,11 @@ const Onboarding=({onDone})=>{
           <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:32}}>
             {slides.map((_,i)=><div key={i} style={{width:i===step?28:8,height:8,borderRadius:4,background:i===step?"white":"rgba(255,255,255,0.35)",transition:"all 0.3s"}}/>)}
           </div>
-          <Btn full onClick={()=>setStep(1)} style={{borderRadius:16,fontSize:16,padding:"14px 0",background:C.white,color:C.green,fontWeight:800}}>Lanjut →</Btn>
-          <div onClick={onDone} style={{textAlign:"center",color:"rgba(255,255,255,0.65)",fontSize:13,marginTop:16,cursor:"pointer"}}>Lewati</div>
+          <Btn full onClick={()=>setStep(1)} style={{borderRadius:16,fontSize:16,padding:"14px 0",background:C.white,color:C.green,fontWeight:800}}>{t.next}</Btn>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:14}}>
+            <div onClick={onDone} style={{color:"rgba(255,255,255,0.65)",fontSize:13,cursor:"pointer"}}>{t.skip}</div>
+            <button onClick={onLang} style={{background:"rgba(255,255,255,0.2)",border:"none",color:"#fff",borderRadius:20,padding:"6px 14px",fontSize:13,fontWeight:700,cursor:"pointer"}}>🌍 {LANGS[lang]?.name}</button>
+          </div>
         </div>
       </div>
     );
@@ -241,10 +439,10 @@ const Onboarding=({onDone})=>{
           {slides.map((_,i)=><div key={i} style={{width:i===step?28:8,height:8,borderRadius:4,background:i===step?"white":"rgba(255,255,255,0.35)",transition:"all 0.3s"}}/>)}
         </div>
         {step<2
-          ?<Btn full onClick={()=>setStep(s=>s+1)} style={{borderRadius:16,fontSize:16,padding:"14px 0",background:C.white,color:C.green}}>Lanjut →</Btn>
-          :<Btn full onClick={onDone} style={{borderRadius:16,fontSize:16,padding:"14px 0",background:C.white,color:C.green}}>🚀 Mulai Gunakan TALARA</Btn>
+          ?<Btn full onClick={()=>setStep(s=>s+1)} style={{borderRadius:16,fontSize:16,padding:"14px 0",background:C.white,color:C.green}}>{t.next}</Btn>
+          :<Btn full onClick={onDone} style={{borderRadius:16,fontSize:16,padding:"14px 0",background:C.white,color:C.green}}>{t.start}</Btn>
         }
-        {step<2&&<div onClick={onDone} style={{textAlign:"center",color:"rgba(255,255,255,0.65)",fontSize:13,marginTop:16,cursor:"pointer"}}>Lewati</div>}
+        {step<2&&<div onClick={onDone} style={{textAlign:"center",color:"rgba(255,255,255,0.65)",fontSize:13,marginTop:16,cursor:"pointer"}}>{t.skip}</div>}
       </div>
     </div>
   );
@@ -253,7 +451,8 @@ const Onboarding=({onDone})=>{
 // ═══════════════════════════════════════════════
 // HOME
 // ═══════════════════════════════════════════════
-const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount})=>{
+const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount,onLang})=>{
+  const {t}=useLang();
   const [search,setSearch]=useState("");
   const [cat,setCat]=useState("semua");
   const filtered=PRODS.filter(p=>(cat==="semua"||p.cat===cat)&&(search===""||p.name.toLowerCase().includes(search.toLowerCase())));
@@ -269,6 +468,7 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount})=>{
             </div>
           </div>
           <div style={{display:"flex",gap:8}}>
+            <button onClick={onLang} style={{background:"rgba(255,255,255,0.2)",border:"none",color:C.white,borderRadius:10,width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:18}}>🌍</button>
             <button onClick={()=>onNav("notif")} style={{background:"rgba(255,255,255,0.2)",border:"none",color:C.white,borderRadius:10,width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",position:"relative",fontSize:18}}>
               🔔{notifCount>0&&<span style={{position:"absolute",top:-3,right:-3,background:C.danger,color:C.white,fontSize:8,borderRadius:10,padding:"1px 4px",fontWeight:800}}>{notifCount}</span>}
             </button>
@@ -277,13 +477,13 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount})=>{
             </button>
           </div>
         </div>
-        <Inp ph="Cari produk tani, kebun, nelayan, pancing..." val={search} onChange={e=>setSearch(e.target.value)} icon="🔍"/>
+        <Inp ph={t.search} val={search} onChange={e=>setSearch(e.target.value)} icon="🔍"/>
       </div>
       <div style={{padding:"0 16px"}}>
         {/* TALPAY */}
         <div onClick={()=>onNav("talpay")} style={{background:C.goldGrad,borderRadius:16,padding:"12px 16px",marginTop:14,cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",boxShadow:"0 4px 15px rgba(245,200,66,0.35)"}}>
           <div>
-            <div style={{fontWeight:800,fontSize:13,color:C.dark}}>💰 Saldo TALPAY Saya</div>
+            <div style={{fontWeight:800,fontSize:13,color:C.dark}}>💰 {t.balance}</div>
             <div style={{fontSize:24,fontWeight:900,color:C.dark,lineHeight:1}}>2.500 <span style={{fontSize:13}}>TP</span></div>
             <div style={{fontSize:11,color:C.dark+"88"}}>= Rp 1.250.000</div>
           </div>
@@ -295,7 +495,7 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount})=>{
 
         {/* Quick Actions */}
         <div style={{display:"flex",gap:6,marginTop:14}}>
-          {[{em:"🛒",l:"Beli",a:"market"},{em:"🔴",l:"Live",a:"live_list"},{em:"📤",l:"Jual",a:"jual"},{em:"💱",l:"TALPAY",a:"talpay"},{em:"📊",l:"Harga",a:"info"},{em:"🌤️",l:"Cuaca",a:"cuaca"}].map(q=>(
+          {[{em:"🛒",l:t.buy,a:"market"},{em:"🔴",l:t.live,a:"live_list"},{em:"📤",l:t.sell,a:"jual"},{em:"💱",l:"TALPAY",a:"talpay"},{em:"📊",l:t.price,a:"info"},{em:"🌤️",l:t.weather,a:"cuaca"}].map(q=>(
             <button key={q.l} onClick={()=>onNav(q.a)} style={{flex:1,background:C.white,border:"none",borderRadius:12,padding:"10px 2px",cursor:"pointer",boxShadow:"0 1px 6px rgba(0,0,0,0.07)",display:"flex",flexDirection:"column",alignItems:"center",gap:3,fontFamily:"inherit"}}>
               <span style={{fontSize:20}}>{q.em}</span>
               <span style={{fontSize:9,fontWeight:700,color:C.mid}}>{q.l}</span>
@@ -308,9 +508,9 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount})=>{
           <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&q=80" alt="promo" style={{width:"100%",height:"100%",objectFit:"cover",position:"absolute",inset:0}}/>
           <div style={{position:"absolute",inset:0,background:"linear-gradient(90deg,rgba(21,101,168,0.92) 0%,rgba(46,155,63,0.85) 100%)",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"0 18px"}}>
             <div>
-              <div style={{color:C.white,fontWeight:800,fontSize:14}}>🎉 Promo Ongkir Gratis!</div>
-              <div style={{color:"rgba(255,255,255,0.85)",fontSize:12,marginTop:3}}>Semua produk pertanian hari ini</div>
-              <div style={{marginTop:6}}><Badge color={C.gold}>Berlaku s/d 23:59</Badge></div>
+              <div style={{color:C.white,fontWeight:800,fontSize:14}}>{t.promo_title}</div>
+              <div style={{color:"rgba(255,255,255,0.85)",fontSize:12,marginTop:3}}>{t.promo_sub}</div>
+              <div style={{marginTop:6}}><Badge color={C.gold}>{t.promo_until}</Badge></div>
             </div>
             <div style={{fontSize:44}}>🚚</div>
           </div>
@@ -318,7 +518,7 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount})=>{
 
         {/* Live */}
         <div style={{marginTop:18}}>
-          <SH title="🔴 Live Sekarang" action="Lihat Semua" onAction={()=>onNav("live_list")}/>
+          <SH title={t.live_now} action={t.see_all} onAction={()=>onNav("live_list")}/>
           <div style={{display:"flex",gap:12,overflowX:"auto",paddingBottom:6}}>
             {LIVES.map(ls=>(
               <div key={ls.id} onClick={()=>onLive(ls)} style={{flex:"0 0 138px",borderRadius:16,overflow:"hidden",cursor:"pointer",height:188,position:"relative"}}>
@@ -351,15 +551,15 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount})=>{
 
         {/* Cats */}
         <div style={{marginTop:18}}>
-          <SH title="Kategori"/>
+          <SH title={t.category}/>
           <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:6}}>
-            {CATS.map(c=><Chip key={c.k} active={cat===c.k} onClick={()=>setCat(c.k)}>{c.em} {c.l}</Chip>)}
+            {CATS.map(c=><Chip key={c.k} active={cat===c.k} onClick={()=>setCat(c.k)}>{c.em} {t[c.k]||c.l}</Chip>)}
           </div>
         </div>
 
         {/* Products */}
         <div style={{marginTop:14}}>
-          <SH title={`${cat==="semua"?"Produk Terbaru":CATS.find(c=>c.k===cat)?.l} (${filtered.length})`} action="Lihat Semua" onAction={()=>onNav("market")}/>
+          <SH title={`${cat==="semua"?t.latest:t[cat]||CATS.find(c=>c.k===cat)?.l} (${filtered.length})`} action={t.see_all} onAction={()=>onNav("market")}/>
           <div style={{display:"flex",flexWrap:"wrap",gap:10}}>
             {filtered.map(p=>(
               <div key={p.id} style={{flex:"0 0 calc(50% - 5px)",background:C.white,borderRadius:14,overflow:"hidden",boxShadow:"0 2px 12px rgba(0,0,0,0.09)",cursor:"pointer"}} onClick={()=>onProduct(p)}>
@@ -1773,6 +1973,9 @@ const BottomNav=({active,onChange,chatUnread,notifUnread})=>{
 // MAIN APP
 // ═══════════════════════════════════════════════
 export default function TalaraApp(){
+  const [lang,setLang]=useState("id");
+  const t=T[lang]||T.id;
+  const [langOpen,setLangOpen]=useState(false);
   const [started,setStarted]=useState(false);
   const [screen,setScreen]=useState("home");
   const [nav,setNav]=useState("home");
@@ -1881,14 +2084,20 @@ export default function TalaraApp(){
 
   const showNav=!["live_room","chat_room"].includes(screen);
 
-  if(!started)return <Onboarding onDone={()=>setStarted(true)}/>;
+  if(!started)return(
+    <LangCtx.Provider value={{lang,t,setLang}}>
+      <Onboarding onDone={()=>setStarted(true)} onLang={()=>setLangOpen(true)}/>
+      {langOpen&&<LangPicker onClose={()=>setLangOpen(false)}/>}
+    </LangCtx.Provider>
+  );
 
   return(
+    <LangCtx.Provider value={{lang,t,setLang}}>
     <div style={{maxWidth:480,margin:"0 auto",minHeight:"100vh",background:C.gray,fontFamily:"'Inter','Segoe UI',system-ui,sans-serif",position:"relative",overflow:"hidden"}}>
       <style>{`*{box-sizing:border-box;} @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}`}</style>
       <div style={{overflowY:"auto",minHeight:"100vh"}}>
 
-        {screen==="home"&&<HomeScreen onNav={handleNav} cartCount={cart.length} onProduct={p=>{setProduct(p);go("product");}} onAddCart={addCart} onLive={ls=>{setLiveSession(ls);go("live_room");}} notifCount={notifUnread}/>}
+        {screen==="home"&&<HomeScreen onNav={handleNav} cartCount={cart.length} onProduct={p=>{setProduct(p);go("product");}} onAddCart={addCart} onLive={ls=>{setLiveSession(ls);go("live_room");}} notifCount={notifUnread} onLang={()=>setLangOpen(true)}/>}
 
         {screen==="market"&&<MarketScreen onProduct={p=>{setProduct(p);go("product","market");}} onAddCart={addCart} onBack={back}/>}
 
@@ -1944,6 +2153,8 @@ export default function TalaraApp(){
 
       {showNav&&<BottomNav active={nav} onChange={handleNav} chatUnread={chatUnread} notifUnread={notifUnread}/>}
       <Toast msg={toast.msg} show={toast.show}/>
+      {langOpen&&<LangPicker onClose={()=>setLangOpen(false)}/>}
     </div>
+    </LangCtx.Provider>
   );
 }
