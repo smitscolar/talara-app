@@ -2167,6 +2167,7 @@ export default function TalaraApp(){
     else if(tab==="keamanan"){go("keamanan");}
     else if(tab==="bantuan"){go("bantuan");}
     else if(tab==="tentang"){go("tentang");}
+    else if(tab==="admin_photo"){go("admin_photo");}
   };
 
   const notifUnread=notifs.filter(n=>!n.read).length;
