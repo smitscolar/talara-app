@@ -212,23 +212,20 @@ const fmtTP=n=>`${fmt(n)} TP`;
 
 // Ambil foto: prioritaskan foto custom dari localStorage
 // prefix: "p" untuk produk, "l" untuk live session
-// Foto produk: prioritas localStorage (custom) → fallback default
-const getProdImg=(prodId,defaultImg,prefix="p")=>{
-  try{const s=JSON.parse(localStorage.getItem("talara_prod_photos_v2")||"{}");return s[prefix+prodId]||defaultImg;}
-  catch{return defaultImg;}
-};
+// Foto produk langsung dari source - PERMANEN
+const getProdImg=(prodId,defaultImg,prefix="p")=>defaultImg;
 
 const PRODS=[
-  {id:1,name:"Gabah Organik Premium",seller:"Pak Slamet",sId:"s1",price:8000,tp:16,unit:"kg",stock:500,cat:"pertanian",em:"🌾",img:"https://images.unsplash.com/photo-1536054878-7cb3e50b6626?w=400&q=80",rating:4.8,sold:234,loc:"Klaten, Jawa Tengah",desc:"Gabah organik bebas pestisida, dibudidayakan dengan metode alami. Sudah tersertifikasi organik dari Dinas Pertanian Jawa Tengah. Hasil panen musim ini sangat baik.",reviews:[{u:"Bu Rina",s:5,c:"Berasnya pulen banget, sudah jadi langganan!"},{u:"Pak Dono",s:5,c:"Kualitas terjamin, pengiriman cepat."},{u:"Ibu Sari",s:4,c:"Bagus, harga juga wajar untuk organik."}]},
-  {id:2,name:"Cabai Merah Keriting",seller:"Bu Rosmini",sId:"s2",price:35000,tp:70,unit:"kg",stock:200,cat:"pertanian",em:"🌶️",img:"https://images.unsplash.com/photo-1526346698789-22fd84314424?w=400&q=80",rating:4.7,sold:189,loc:"Garut, Jawa Barat",desc:"Cabai merah keriting segar dipetik pagi hari langsung dari kebun. Tingkat kepedasan tinggi, cocok untuk masakan Padang dan sambal.",reviews:[{u:"Warung Padang",s:5,c:"Segar dan pedas, pelanggan suka!"},{u:"Ibu Dapur",s:4,c:"Kualitas konsisten, stok selalu ada."}]},
-  {id:3,name:"Kopi Arabica Gayo",seller:"Koperasi Gayo",sId:"s3",price:120000,tp:240,unit:"kg",stock:300,cat:"perkebunan",em:"☕",img:"https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400&q=80",rating:5.0,sold:567,loc:"Aceh Tengah, Aceh",desc:"Kopi arabica single origin dari dataran tinggi Gayo 1200 mdpl. Proses natural, rasa fruity dengan aroma floral. Sudah diekspor ke Jepang, Eropa dan Amerika.",reviews:[{u:"Roaster Jakarta",s:5,c:"Konsisten, terbaik dari Gayo!"},{u:"Cafe Bali",s:5,c:"Pelanggan kami sangat suka kualitasnya."}]},
-  {id:4,name:"Udang Vaname Segar",seller:"Tambak Pak Budi",sId:"s4",price:85000,tp:170,unit:"kg",stock:500,cat:"nelayan",em:"🦐",img:"https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=400&q=80",rating:4.8,sold:678,loc:"Lampung Selatan",desc:"Udang vaname size 50, budidaya tambak intensif dengan pakan berkualitas. Segar, bersih, bebas antibiotik. Siap kirim dengan cold chain.",reviews:[{u:"Restoran Seafood",s:5,c:"Segar dan bersih, cocok untuk restoran premium."},{u:"Hotel Bintang 5",s:5,c:"Kualitas terjaga, pengiriman andal."}]},
-  {id:5,name:"Ikan Tuna Sirip Kuning",seller:"Nelayan Bitung",sId:"s5",price:65000,tp:130,unit:"kg",stock:100,cat:"nelayan",em:"🐟",img:"https://images.unsplash.com/photo-1510130387422-82bed34b37e9?w=400&q=80",rating:4.9,sold:345,loc:"Bitung, Sulawesi Utara",desc:"Tuna sirip kuning segar, tangkapan pagi hari dari Laut Maluku. Daging merah segar, cocok untuk sashimi grade dan steak tuna premium.",reviews:[{u:"Sushi Bar Jakarta",s:5,c:"Kualitas sashimi grade, luar biasa!"},{u:"Hotel Resort",s:5,c:"Selalu fresh dan berkualitas tinggi."}]},
-  {id:6,name:"Kakao Fermentasi",seller:"Bu Cici Farm",sId:"s6",price:45000,tp:90,unit:"kg",stock:800,cat:"perkebunan",em:"🍫",img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80",rating:4.9,sold:234,loc:"Kolaka, Sulawesi Tenggara",desc:"Biji kakao fermentasi 5 hari penuh dengan metode kotak kayu. Flavor profile fruity dan nutty. Diminati chocolate maker lokal dan internasional.",reviews:[{u:"Chocolatier",s:5,c:"Best Sulawesi cocoa I ever tasted!"},{u:"Eksportir Kakao",s:5,c:"Kualitas konsisten, siap ekspor."}]},
-  {id:7,name:"Traktor Mini 7HP",seller:"AgriMaju Store",sId:"s7",price:8500000,tp:17000,unit:"unit",stock:10,cat:"peralatan",em:"🚜",img:"https://images.unsplash.com/photo-1530267981375-f0de937f5f13?w=400&q=80",rating:4.8,sold:45,loc:"Malang, Jawa Timur",desc:"Traktor mini mesin diesel 7HP, cocok untuk sawah 0.5-2 hektar. Dilengkapi rotavator, mudah dioperasikan oleh satu orang. Garansi mesin 1 tahun.",reviews:[{u:"Petani Klaten",s:5,c:"Sangat membantu, hemat tenaga dan waktu!"},{u:"Kelompok Tani",s:4,c:"Performa bagus untuk sawah kecil hingga sedang."}]},
-  {id:8,name:"Rod Pancing Carbon 2.4m",seller:"Fishing Pro",sId:"s8",price:280000,tp:560,unit:"unit",stock:25,cat:"pancing",em:"🎣",img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&q=80",rating:4.8,sold:89,loc:"Jakarta",desc:"Rod karbon T700, ringan dan kuat, panjang 2.4m. Cocok untuk mancing laut, sungai, dan danau. Ring SiC anti gesekan, bawa angler ke level berikutnya.",reviews:[{u:"Angler Pro",s:5,c:"Ringan, sensitif, sangat direkomendasikan!"},{u:"Pemancing Danau",s:5,c:"Kualitas bagus dengan harga terjangkau."}]},
-  {id:9,name:"Sawit TBS Segar",seller:"Pak Ridwan",sId:"s9",price:1800,tp:3.6,unit:"kg",stock:50000,cat:"perkebunan",em:"🌴",img:"https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=80",rating:4.5,sold:1200,loc:"Riau",desc:"Tandan Buah Segar kelapa sawit berkualitas tinggi. Kadar minyak optimal, siap olah ke PKS. Tersedia dalam jumlah besar untuk kebutuhan pabrik.",reviews:[{u:"PKS Riau",s:5,c:"Kualitas TBS konsisten, pasokan lancar."}]},
-  {id:10,name:"Kepiting Bakau Jumbo",seller:"Budidaya Pak Leman",sId:"s10",price:150000,tp:300,unit:"kg",stock:50,cat:"nelayan",em:"🦀",img:"https://images.unsplash.com/photo-1502462041640-7571cc0fe38c?w=400&q=80",rating:5.0,sold:89,loc:"Kalimantan Selatan",desc:"Kepiting bakau jumbo 500g+, budidaya manggrove alami, berisi penuh. Populer di restoran seafood premium dan hotel bintang 5.",reviews:[{u:"Chef Hotel Mulia",s:5,c:"Kepiting terbaik, daging penuh dan manis!"},{u:"Restoran Seafood",s:5,c:"Pelanggan sangat puas, jadi menu andalan."}]},
+  {id:1,name:"Gabah Organik Premium",seller:"Pak Slamet",sId:"s1",price:8000,tp:16,unit:"kg",stock:500,cat:"pertanian",em:"🌾",img:"/prod-gabah.jpg",rating:4.8,sold:234,loc:"Klaten, Jawa Tengah",desc:"Gabah organik bebas pestisida, dibudidayakan dengan metode alami. Sudah tersertifikasi organik dari Dinas Pertanian Jawa Tengah. Hasil panen musim ini sangat baik.",reviews:[{u:"Bu Rina",s:5,c:"Berasnya pulen banget, sudah jadi langganan!"},{u:"Pak Dono",s:5,c:"Kualitas terjamin, pengiriman cepat."},{u:"Ibu Sari",s:4,c:"Bagus, harga juga wajar untuk organik."}]},
+  {id:2,name:"Cabai Merah Keriting",seller:"Bu Rosmini",sId:"s2",price:35000,tp:70,unit:"kg",stock:200,cat:"pertanian",em:"🌶️",img:"/prod-cabai.jpg",rating:4.7,sold:189,loc:"Garut, Jawa Barat",desc:"Cabai merah keriting segar dipetik pagi hari langsung dari kebun. Tingkat kepedasan tinggi, cocok untuk masakan Padang dan sambal.",reviews:[{u:"Warung Padang",s:5,c:"Segar dan pedas, pelanggan suka!"},{u:"Ibu Dapur",s:4,c:"Kualitas konsisten, stok selalu ada."}]},
+  {id:3,name:"Kopi Arabica Gayo",seller:"Koperasi Gayo",sId:"s3",price:120000,tp:240,unit:"kg",stock:300,cat:"perkebunan",em:"☕",img:"/prod-kopi.jpg",rating:5.0,sold:567,loc:"Aceh Tengah, Aceh",desc:"Kopi arabica single origin dari dataran tinggi Gayo 1200 mdpl. Proses natural, rasa fruity dengan aroma floral. Sudah diekspor ke Jepang, Eropa dan Amerika.",reviews:[{u:"Roaster Jakarta",s:5,c:"Konsisten, terbaik dari Gayo!"},{u:"Cafe Bali",s:5,c:"Pelanggan kami sangat suka kualitasnya."}]},
+  {id:4,name:"Udang Vaname Segar",seller:"Tambak Pak Budi",sId:"s4",price:85000,tp:170,unit:"kg",stock:500,cat:"nelayan",em:"🦐",img:"/prod-udang.jpg",rating:4.8,sold:678,loc:"Lampung Selatan",desc:"Udang vaname size 50, budidaya tambak intensif dengan pakan berkualitas. Segar, bersih, bebas antibiotik. Siap kirim dengan cold chain.",reviews:[{u:"Restoran Seafood",s:5,c:"Segar dan bersih, cocok untuk restoran premium."},{u:"Hotel Bintang 5",s:5,c:"Kualitas terjaga, pengiriman andal."}]},
+  {id:5,name:"Ikan Tuna Sirip Kuning",seller:"Nelayan Bitung",sId:"s5",price:65000,tp:130,unit:"kg",stock:100,cat:"nelayan",em:"🐟",img:"/prod-tuna.png",rating:4.9,sold:345,loc:"Bitung, Sulawesi Utara",desc:"Tuna sirip kuning segar, tangkapan pagi hari dari Laut Maluku. Daging merah segar, cocok untuk sashimi grade dan steak tuna premium.",reviews:[{u:"Sushi Bar Jakarta",s:5,c:"Kualitas sashimi grade, luar biasa!"},{u:"Hotel Resort",s:5,c:"Selalu fresh dan berkualitas tinggi."}]},
+  {id:6,name:"Kakao Fermentasi",seller:"Bu Cici Farm",sId:"s6",price:45000,tp:90,unit:"kg",stock:800,cat:"perkebunan",em:"🍫",img:"/prod-kakao.jpg",rating:4.9,sold:234,loc:"Kolaka, Sulawesi Tenggara",desc:"Biji kakao fermentasi 5 hari penuh dengan metode kotak kayu. Flavor profile fruity dan nutty. Diminati chocolate maker lokal dan internasional.",reviews:[{u:"Chocolatier",s:5,c:"Best Sulawesi cocoa I ever tasted!"},{u:"Eksportir Kakao",s:5,c:"Kualitas konsisten, siap ekspor."}]},
+  {id:7,name:"Traktor Mini 7HP",seller:"AgriMaju Store",sId:"s7",price:8500000,tp:17000,unit:"unit",stock:10,cat:"peralatan",em:"🚜",img:"/prod-traktor.jpg",rating:4.8,sold:45,loc:"Malang, Jawa Timur",desc:"Traktor mini mesin diesel 7HP, cocok untuk sawah 0.5-2 hektar. Dilengkapi rotavator, mudah dioperasikan oleh satu orang. Garansi mesin 1 tahun.",reviews:[{u:"Petani Klaten",s:5,c:"Sangat membantu, hemat tenaga dan waktu!"},{u:"Kelompok Tani",s:4,c:"Performa bagus untuk sawah kecil hingga sedang."}]},
+  {id:8,name:"Rod Pancing Carbon 2.4m",seller:"Fishing Pro",sId:"s8",price:280000,tp:560,unit:"unit",stock:25,cat:"pancing",em:"🎣",img:"/prod-pancing.jpg",rating:4.8,sold:89,loc:"Jakarta",desc:"Rod karbon T700, ringan dan kuat, panjang 2.4m. Cocok untuk mancing laut, sungai, dan danau. Ring SiC anti gesekan, bawa angler ke level berikutnya.",reviews:[{u:"Angler Pro",s:5,c:"Ringan, sensitif, sangat direkomendasikan!"},{u:"Pemancing Danau",s:5,c:"Kualitas bagus dengan harga terjangkau."}]},
+  {id:9,name:"Sawit TBS Segar",seller:"Pak Ridwan",sId:"s9",price:1800,tp:3.6,unit:"kg",stock:50000,cat:"perkebunan",em:"🌴",img:"/prod-sawit.jpg",rating:4.5,sold:1200,loc:"Riau",desc:"Tandan Buah Segar kelapa sawit berkualitas tinggi. Kadar minyak optimal, siap olah ke PKS. Tersedia dalam jumlah besar untuk kebutuhan pabrik.",reviews:[{u:"PKS Riau",s:5,c:"Kualitas TBS konsisten, pasokan lancar."}]},
+  {id:10,name:"Kepiting Bakau Jumbo",seller:"Budidaya Pak Leman",sId:"s10",price:150000,tp:300,unit:"kg",stock:50,cat:"nelayan",em:"🦀",img:"/prod-kepiting.png",rating:5.0,sold:89,loc:"Kalimantan Selatan",desc:"Kepiting bakau jumbo 500g+, budidaya manggrove alami, berisi penuh. Populer di restoran seafood premium dan hotel bintang 5.",reviews:[{u:"Chef Hotel Mulia",s:5,c:"Kepiting terbaik, daging penuh dan manis!"},{u:"Restoran Seafood",s:5,c:"Pelanggan sangat puas, jadi menu andalan."}]},
 ];
 
 const SELLERS={
@@ -254,10 +251,10 @@ const CATS=[
 ];
 
 const LIVES=[
-  {id:1,seller:"Pak Slamet Live",sId:"s1",product:"Flash Sale Gabah Organik!",viewers:234,em:"🌾",img:"https://images.unsplash.com/photo-1536054878-7cb3e50b6626?w=400&q=80",price:7500,origPrice:8000},
-  {id:2,seller:"Nelayan Bitung Live",sId:"s5",product:"Lelang Tuna Segar Pagi",viewers:1203,em:"🐟",img:"https://images.unsplash.com/photo-1510130387422-82bed34b37e9?w=400&q=80",price:60000,origPrice:65000},
-  {id:3,seller:"Kopi Gayo Official",sId:"s3",product:"Kopi Premium Diskon 30%",viewers:567,em:"☕",img:"https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400&q=80",price:84000,origPrice:120000},
-  {id:4,seller:"Fishing Pro Live",sId:"s8",product:"Demo Alat Pancing Baru",viewers:189,em:"🎣",img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&q=80",price:250000,origPrice:280000},
+  {id:1,seller:"Pak Slamet Live",sId:"s1",product:"Flash Sale Gabah Organik!",viewers:234,em:"🌾",img:"/prod-gabah.jpg",price:7500,origPrice:8000},
+  {id:2,seller:"Nelayan Bitung Live",sId:"s5",product:"Lelang Tuna Segar Pagi",viewers:1203,em:"🐟",img:"/prod-tuna.png",price:60000,origPrice:65000},
+  {id:3,seller:"Kopi Gayo Official",sId:"s3",product:"Kopi Premium Diskon 30%",viewers:567,em:"☕",img:"/prod-kopi.jpg",price:84000,origPrice:120000},
+  {id:4,seller:"Fishing Pro Live",sId:"s8",product:"Demo Alat Pancing Baru",viewers:189,em:"🎣",img:"/prod-pancing.jpg",price:250000,origPrice:280000},
 ];
 
 const NOTIFS_D=[
@@ -2170,143 +2167,6 @@ const AboutScreen=({onBack})=>(
 // ═══════════════════════════════════════════════
 // PROFIL
 // ═══════════════════════════════════════════════
-// ADMIN PHOTO MANAGER
-// ═══════════════════════════════════════════════
-const PHOTO_KEY="talara_prod_photos_v2";
-const loadPhotos=()=>{try{return JSON.parse(localStorage.getItem(PHOTO_KEY)||"{}");}catch{return {};}};
-const savePhotos=(obj)=>localStorage.setItem(PHOTO_KEY,JSON.stringify(obj));
-
-const AdminPhotoScreen=({onBack})=>{
-  const [photos,setPhotos]=useState(loadPhotos);
-  const [saving,setSaving]=useState(null);
-  const [tab,setTab]=useState("produk");
-
-  const handleFile=(key,e)=>{
-    const file=e.target.files[0];
-    if(!file)return;
-    if(file.size>8*1024*1024){alert("Foto max 8MB!");return;}
-    setSaving(key);
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      const updated={...photos,[key]:ev.target.result};
-      setPhotos(updated);
-      savePhotos(updated);
-      setSaving(null);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const hapus=(key)=>{
-    const updated={...photos};
-    delete updated[key];
-    setPhotos(updated);
-    savePhotos(updated);
-  };
-
-  const ItemCard=({k,name,em,sub,defaultImg})=>{
-    const has=!!photos[k];
-    return(
-      <div style={{background:"#fff",borderRadius:14,padding:"10px 12px",marginBottom:10,
-        border:`1.5px solid ${has?"#1B6B2F":"#E5E7EB"}`,
-        boxShadow:has?"0 2px 12px rgba(27,107,47,0.12)":"0 1px 4px rgba(0,0,0,0.06)"}}>
-        <div style={{display:"flex",gap:10,alignItems:"center"}}>
-          <div style={{width:66,height:66,borderRadius:10,overflow:"hidden",flexShrink:0,position:"relative",background:"#F3F4F6"}}>
-            <img src={has?photos[k]:defaultImg} alt={name}
-              style={{width:"100%",height:"100%",objectFit:"cover"}}
-              onError={e=>{e.target.style.display="none";}}/>
-            <div style={{position:"absolute",bottom:0,left:0,right:0,
-              background:has?"rgba(27,107,47,0.85)":"rgba(0,0,0,0.45)",
-              fontSize:8,color:"#fff",textAlign:"center",padding:"2px 0"}}>
-              {has?"✅ custom":"default"}
-            </div>
-          </div>
-          <div style={{flex:1,minWidth:0}}>
-            <div style={{fontWeight:700,fontSize:12,color:"#111",marginBottom:1}}>{em} {name}</div>
-            <div style={{fontSize:10,color:"#888",marginBottom:7}}>{sub}</div>
-            <div style={{display:"flex",gap:6}}>
-              <label style={{
-                flex:1,background:has?"#E8F5E9":"#1B6B2F",
-                color:has?"#1B6B2F":"#fff",
-                border:"1.5px solid #1B6B2F",borderRadius:8,
-                padding:"5px 0",fontSize:11,fontWeight:700,
-                textAlign:"center",cursor:"pointer",display:"block"}}>
-                {saving===k?"⏳...":(has?"🔄 Ganti":"📷 Upload")}
-                <input type="file" accept="image/*" style={{display:"none"}}
-                  onChange={e=>handleFile(k,e)} disabled={saving===k}/>
-              </label>
-              {has&&<button onClick={()=>hapus(k)}
-                style={{background:"#FEE2E2",color:"#DC2626",border:"1.5px solid #DC2626",
-                  borderRadius:8,padding:"5px 10px",fontSize:11,fontWeight:700,
-                  cursor:"pointer",fontFamily:"inherit"}}>🗑️</button>}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const totalP=PRODS.filter(p=>photos["p"+p.id]).length;
-  const totalL=LIVES.filter(l=>photos["l"+l.id]).length;
-
-  return(
-    <div style={{paddingBottom:90,background:"#F8F9FA",minHeight:"100vh"}}>
-      <div style={{background:C.greenGrad,padding:"16px 16px 20px"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <BackBtn onClick={onBack}/>
-          <div style={{color:C.white,fontWeight:800,fontSize:17}}>⚙️ Admin: Upload Foto</div>
-        </div>
-      </div>
-
-      {/* Warning */}
-      <div style={{margin:"12px 14px 0",background:"#FFF3CD",border:"1.5px solid #FFC107",
-        borderRadius:12,padding:"10px 14px",fontSize:12,color:"#856404"}}>
-        ⚠️ Foto tersimpan di browser ini. Setelah upload semua foto yang benar, foto akan permanen di browser ini.
-      </div>
-
-      {/* Progress */}
-      <div style={{margin:"10px 14px",background:"#fff",borderRadius:12,padding:"10px 14px",
-        display:"flex",justifyContent:"space-around",textAlign:"center",
-        boxShadow:"0 1px 6px rgba(0,0,0,0.06)"}}>
-        <div>
-          <div style={{fontSize:18,fontWeight:900,color:"#1B6B2F"}}>{totalP}/{PRODS.length}</div>
-          <div style={{fontSize:10,color:"#888"}}>Produk</div>
-        </div>
-        <div style={{width:1,background:"#E5E7EB"}}/>
-        <div>
-          <div style={{fontSize:18,fontWeight:900,color:"#1B6B2F"}}>{totalL}/{LIVES.length}</div>
-          <div style={{fontSize:10,color:"#888"}}>Live Session</div>
-        </div>
-        <div style={{width:1,background:"#E5E7EB"}}/>
-        <div>
-          <div style={{fontSize:18,fontWeight:900,color:totalP+totalL===PRODS.length+LIVES.length?"#1B6B2F":"#F57F17"}}>{totalP+totalL}/{PRODS.length+LIVES.length}</div>
-          <div style={{fontSize:10,color:"#888"}}>Total</div>
-        </div>
-      </div>
-
-      {/* Tab */}
-      <div style={{display:"flex",margin:"0 14px 10px",background:"#fff",borderRadius:10,padding:3,
-        boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
-        {[["produk","🛒 Produk ("+PRODS.length+")"],["live","🔴 Live ("+LIVES.length+")"]].map(([k,l])=>(
-          <div key={k} onClick={()=>setTab(k)}
-            style={{flex:1,textAlign:"center",padding:"8px 4px",borderRadius:8,
-              background:tab===k?"#1B6B2F":"transparent",
-              color:tab===k?"#fff":"#666",fontWeight:700,fontSize:12,cursor:"pointer",transition:"all 0.2s"}}>
-            {l}
-          </div>
-        ))}
-      </div>
-
-      {/* List */}
-      <div style={{padding:"0 14px"}}>
-        {tab==="produk"
-          ?PRODS.map(p=><ItemCard key={p.id} k={"p"+p.id} name={p.name} em={p.em} sub={`ID:${p.id} · ${p.cat}`} defaultImg={p.img}/>)
-          :LIVES.map(l=><ItemCard key={l.id} k={"l"+l.id} name={l.seller} em={l.em} sub={`Live · ${l.product}`} defaultImg={l.img}/>)
-        }
-      </div>
-    </div>
-  );
-};
-
 const ProfilScreen=({onNav,onBack})=>{
   const [editMode,setEditMode]=useState(false);
   const menus=[
@@ -2322,7 +2182,6 @@ const ProfilScreen=({onNav,onBack})=>{
     {icon:"🔒",l:"Keamanan Akun",a:()=>onNav("keamanan")},
     {icon:"❓",l:"Bantuan & FAQ",a:()=>onNav("bantuan")},
     {icon:"ℹ️",l:"Tentang TALARA",a:()=>onNav("tentang")},
-    {icon:"🛠️",l:"⚙️ Admin: Upload Foto",a:()=>onNav("admin_photo")},
   ];
   return(
     <div style={{paddingBottom:90}}>
@@ -2516,7 +2375,6 @@ export default function TalaraApp(){
     else if(tab==="keamanan"){go("keamanan");}
     else if(tab==="bantuan"){go("bantuan");}
     else if(tab==="tentang"){go("tentang");}
-    else if(tab==="admin_photo"){go("admin_photo");}
   };
 
   const notifUnread=notifs.filter(n=>!n.read).length;
@@ -2592,7 +2450,6 @@ export default function TalaraApp(){
         {screen==="bantuan"&&<HelpScreen onBack={back}/>}
 
         {screen==="tentang"&&<AboutScreen onBack={back}/> }
-        {screen==="admin_photo"&&<AdminPhotoScreen onBack={back}/>}
 
         {screen==="profil"&&<ProfilScreen onNav={handleNav} onBack={back}/>}
 
