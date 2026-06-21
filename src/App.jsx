@@ -204,39 +204,24 @@ const Onboarding=({onDone})=>{
 
   if(s.type==="photo"){
     return(
-      <div style={{minHeight:"100vh",position:"relative",display:"flex",flexDirection:"column",justifyContent:"space-between",overflow:"hidden",background:"#000"}}>
-        {/* Fullscreen crossfade photos */}
-        {imgs.map((src,i)=>(
-          <img key={i} src={src} alt="" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",opacity:imgIdx===i?1:0,transition:"opacity 1.2s ease-in-out",zIndex:0}}/>
-        ))}
-        {/* Gradient overlay top */}
-        <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.05) 40%,rgba(0,0,0,0.05) 55%,rgba(0,0,0,0.88) 100%)",zIndex:1}}/>
-        {/* TOP: Logo */}
-        <div style={{position:"relative",zIndex:2,padding:"52px 24px 0",textAlign:"center"}}>
-          <img src="/talara-logo.webp" alt="TALARA" style={{width:120,height:"auto",filter:"drop-shadow(0 4px 16px rgba(0,0,0,0.6))"}}/>
+      <div style={{minHeight:"100vh",background:C.greenGrad,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"space-between",padding:"60px 28px 48px"}}>
+        <div style={{textAlign:"center",width:"100%"}}>
+          <Logo size={80}/>
+          {/* 3 foto berjejer, seamless, rounded */}
+          <div style={{display:"flex",margin:"24px 0 16px",borderRadius:18,overflow:"hidden",boxShadow:"0 8px 32px rgba(0,0,0,0.28)"}}>
+            {imgs.map((src,i)=>(
+              <img key={i} src={src} alt="" style={{flex:1,height:160,objectFit:"cover",display:"block"}}/>
+            ))}
+          </div>
+          <div style={{color:C.white,fontWeight:900,fontSize:24,lineHeight:1.3,marginBottom:10}}>{s.title}</div>
+          <div style={{color:"rgba(255,255,255,0.85)",fontSize:15,lineHeight:1.75}}>{s.sub}</div>
         </div>
-        {/* CENTER: category badge */}
-        <div style={{position:"relative",zIndex:2,textAlign:"center"}}>
-          <div style={{display:"inline-flex",alignItems:"center",gap:8,background:"rgba(0,0,0,0.35)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.25)",borderRadius:30,padding:"10px 24px",color:"#fff",fontSize:16,fontWeight:700,letterSpacing:0.5}}>
-            {imgLabels[imgIdx]}
+        <div style={{width:"100%"}}>
+          <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:32}}>
+            {slides.map((_,i)=><div key={i} style={{width:i===step?28:8,height:8,borderRadius:4,background:i===step?"white":"rgba(255,255,255,0.35)",transition:"all 0.3s"}}/>)}
           </div>
-        </div>
-        {/* BOTTOM: text + dots + button */}
-        <div style={{position:"relative",zIndex:2,padding:"0 24px 52px"}}>
-          <div style={{textAlign:"center",marginBottom:24}}>
-            <div style={{color:"#fff",fontWeight:900,fontSize:30,lineHeight:1.2,marginBottom:10,textShadow:"0 2px 16px rgba(0,0,0,0.7)"}}>{s.title}</div>
-            <div style={{color:"rgba(255,255,255,0.82)",fontSize:14,lineHeight:1.85,whiteSpace:"pre-line"}}>{s.sub}</div>
-          </div>
-          {/* Photo dots */}
-          <div style={{display:"flex",gap:6,justifyContent:"center",marginBottom:16}}>
-            {imgs.map((_,i)=><div key={i} style={{width:i===imgIdx?28:8,height:8,borderRadius:4,background:i===imgIdx?"#fff":"rgba(255,255,255,0.38)",transition:"all 0.4s"}}/>)}
-          </div>
-          {/* Slide dots */}
-          <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:22}}>
-            {slides.map((_,i)=><div key={i} style={{width:i===step?28:8,height:8,borderRadius:4,background:i===step?"#fff":"rgba(255,255,255,0.35)",transition:"all 0.3s"}}/>)}
-          </div>
-          <Btn full onClick={()=>setStep(1)} style={{borderRadius:16,fontSize:16,padding:"15px 0",background:"#fff",color:C.green,fontWeight:800,boxShadow:"0 4px 20px rgba(0,0,0,0.3)"}}>Lanjut →</Btn>
-          <div onClick={onDone} style={{textAlign:"center",color:"rgba(255,255,255,0.55)",fontSize:13,marginTop:14,cursor:"pointer"}}>Lewati</div>
+          <Btn full onClick={()=>setStep(1)} style={{borderRadius:16,fontSize:16,padding:"14px 0",background:C.white,color:C.green,fontWeight:800}}>Lanjut →</Btn>
+          <div onClick={onDone} style={{textAlign:"center",color:"rgba(255,255,255,0.65)",fontSize:13,marginTop:16,cursor:"pointer"}}>Lewati</div>
         </div>
       </div>
     );
