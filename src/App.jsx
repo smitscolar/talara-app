@@ -384,6 +384,97 @@ const StatusB=({status})=>{
 };
 
 // ═══════════════════════════════════════════════
+// WELCOME SCREEN (Shopee-style country selector)
+// ═══════════════════════════════════════════════
+const COUNTRIES=[
+  {code:"id",flag:"🇮🇩",name:"Indonesia",lang:"id"},
+  {code:"my",flag:"🇲🇾",name:"Malaysia",lang:"en"},
+  {code:"sg",flag:"🇸🇬",name:"Singapura",lang:"en"},
+  {code:"th",flag:"🇹🇭",name:"Thailand",lang:"en"},
+  {code:"ph",flag:"🇵🇭",name:"Filipina",lang:"en"},
+  {code:"vn",flag:"🇻🇳",name:"Vietnam",lang:"en"},
+  {code:"bn",flag:"🇧🇳",name:"Brunei",lang:"en"},
+  {code:"mv",flag:"🇲🇻",name:"Maldives",lang:"dv"},
+  {code:"bd",flag:"🇧🇩",name:"Bangladesh",lang:"bn"},
+  {code:"in",flag:"🇮🇳",name:"India",lang:"hi"},
+  {code:"cn",flag:"🇨🇳",name:"China",lang:"zh"},
+  {code:"sa",flag:"🇸🇦",name:"Arab Saudi",lang:"ar"},
+  {code:"fr",flag:"🇫🇷",name:"France",lang:"fr"},
+  {code:"gb",flag:"🇬🇧",name:"United Kingdom",lang:"en"},
+];
+
+const WelcomeScreen=({onSelect})=>{
+  const [hov,setHov]=useState(null);
+  return(
+    <div style={{minHeight:"100vh",background:"#F5F5F5",display:"flex",flexDirection:"column"}}>
+      {/* Header banner */}
+      <div style={{background:"linear-gradient(135deg,#1B6B2F 0%,#2E8B46 50%,#3DAA5C 100%)",padding:"32px 20px 28px",textAlign:"center",position:"relative",overflow:"hidden"}}>
+        {/* Dekorasi lingkaran */}
+        <div style={{position:"absolute",top:-40,right:-40,width:130,height:130,borderRadius:"50%",background:"rgba(255,255,255,0.08)"}}/>
+        <div style={{position:"absolute",bottom:-30,left:-20,width:90,height:90,borderRadius:"50%",background:"rgba(255,255,255,0.06)"}}/>
+        {/* Ilustrasi emoji petani */}
+        <div style={{display:"flex",justifyContent:"center",gap:10,marginBottom:14,fontSize:36}}>
+          <span style={{animationName:"bounce",animationDuration:"1.8s",animationIterationCount:"infinite",display:"inline-block"}}>👨‍🌾</span>
+          <span style={{animationName:"bounce",animationDuration:"1.8s",animationDelay:"0.3s",animationIterationCount:"infinite",display:"inline-block"}}>🌾</span>
+          <span style={{animationName:"bounce",animationDuration:"1.8s",animationDelay:"0.6s",animationIterationCount:"infinite",display:"inline-block"}}>🐟</span>
+          <span style={{animationName:"bounce",animationDuration:"1.8s",animationDelay:"0.9s",animationIterationCount:"infinite",display:"inline-block"}}>🌿</span>
+          <span style={{animationName:"bounce",animationDuration:"1.8s",animationDelay:"1.2s",animationIterationCount:"infinite",display:"inline-block"}}>👩‍🌾</span>
+        </div>
+        <Logo size={56}/>
+        <div style={{color:"#fff",fontWeight:900,fontSize:22,marginTop:10,letterSpacing:0.5}}>Selamat Datang di TALARA</div>
+        <div style={{color:"rgba(255,255,255,0.82)",fontSize:13,marginTop:6,lineHeight:1.6}}>
+          Platform agrikultur terlengkap.<br/>Pilih negara atau wilayah Anda.
+        </div>
+      </div>
+
+      {/* Info strip */}
+      <div style={{background:"#fff",borderBottom:"1px solid #EBEBEB",padding:"10px 20px",display:"flex",justifyContent:"space-around",textAlign:"center"}}>
+        {[["🛡️","Transaksi Aman"],["🤝","Penjual Tepercaya"],["🆓","Gratis Daftar"]].map(([em,l])=>(
+          <div key={l} style={{flex:1}}>
+            <div style={{fontSize:18}}>{em}</div>
+            <div style={{fontSize:9,color:"#555",fontWeight:600,marginTop:2}}>{l}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pilih negara */}
+      <div style={{padding:"16px 16px 24px",flex:1}}>
+        <div style={{fontSize:13,fontWeight:700,color:"#444",marginBottom:12,textAlign:"center"}}>Pilih Negara / Wilayah</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10}}>
+          {COUNTRIES.map(c=>(
+            <div
+              key={c.code}
+              onClick={()=>onSelect(c)}
+              onTouchStart={()=>setHov(c.code)}
+              onTouchEnd={()=>setHov(null)}
+              onMouseEnter={()=>setHov(c.code)}
+              onMouseLeave={()=>setHov(null)}
+              style={{
+                display:"flex",flexDirection:"column",alignItems:"center",
+                background:hov===c.code?"#E8F5E9":"#fff",
+                border:`2px solid ${hov===c.code?"#1B6B2F":"#EBEBEB"}`,
+                borderRadius:14,padding:"12px 6px 10px",cursor:"pointer",
+                transition:"all 0.15s",transform:hov===c.code?"scale(1.04)":"scale(1)",
+                boxShadow:hov===c.code?"0 4px 16px rgba(27,107,47,0.18)":"0 1px 4px rgba(0,0,0,0.06)"
+              }}
+            >
+              <div style={{fontSize:28,lineHeight:1,marginBottom:6}}>{c.flag}</div>
+              <div style={{fontSize:10,fontWeight:700,color:hov===c.code?"#1B6B2F":"#333",textAlign:"center",lineHeight:1.3}}>{c.name}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{textAlign:"center",padding:"14px 20px",background:"#fff",borderTop:"1px solid #EBEBEB"}}>
+        <div style={{fontSize:11,color:"#999"}}>TALARA © 2026 · Farm · Plantation · Fishery</div>
+        <div style={{fontSize:10,color:"#BBB",marginTop:2}}>From Nature To The World 🌍</div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════
 // ONBOARDING
 // ═══════════════════════════════════════════════
 const Onboarding=({onDone,onLang})=>{
@@ -1984,6 +2075,7 @@ export default function TalaraApp(){
   const [lang,setLang]=useState("id");
   const t=T[lang]||T.id;
   const [langOpen,setLangOpen]=useState(false);
+  const [welcomed,setWelcomed]=useState(false);
   const [started,setStarted]=useState(false);
   const [screen,setScreen]=useState("home");
   const [nav,setNav]=useState("home");
@@ -2091,6 +2183,12 @@ export default function TalaraApp(){
   const chatUnread=chats.reduce((s,c)=>s+c.unread,0);
 
   const showNav=!["live_room","chat_room"].includes(screen);
+
+  if(!welcomed)return(
+    <LangCtx.Provider value={{lang,t,setLang}}>
+      <WelcomeScreen onSelect={c=>{setLang(c.lang);setWelcomed(true);}}/>
+    </LangCtx.Provider>
+  );
 
   if(!started)return(
     <LangCtx.Provider value={{lang,t,setLang}}>
