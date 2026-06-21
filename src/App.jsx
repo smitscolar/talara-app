@@ -410,34 +410,33 @@ const WelcomeScreen=({onSelect})=>{
     <div style={{minHeight:"100vh",background:"#0D2137",display:"flex",flexDirection:"column",fontFamily:"'Inter','Segoe UI',system-ui,sans-serif"}}>
 
       {/* ── HERO ── */}
-      <div style={{background:"linear-gradient(160deg,#0D2137 0%,#1B6B2F 60%,#2E8B46 100%)",padding:"48px 24px 36px",textAlign:"center",position:"relative",overflow:"hidden",flexShrink:0}}>
+      <div style={{background:"linear-gradient(160deg,#0D2137 0%,#1B6B2F 60%,#2E8B46 100%)",padding:"28px 24px 22px",textAlign:"center",position:"relative",overflow:"hidden",flexShrink:0}}>
         {/* Dekorasi background circles */}
         <div style={{position:"absolute",top:-60,right:-60,width:200,height:200,borderRadius:"50%",background:"rgba(255,255,255,0.04)"}}/>
         <div style={{position:"absolute",bottom:-40,left:-40,width:140,height:140,borderRadius:"50%",background:"rgba(255,255,255,0.04)"}}/>
-        <div style={{position:"absolute",top:"30%",left:-30,width:80,height:80,borderRadius:"50%",background:"rgba(255,215,0,0.07)"}}/>
 
         {/* Logo resmi TALARA - ikon transparan */}
-        <div style={{display:"flex",justifyContent:"center",marginBottom:16}}>
+        <div style={{display:"flex",justifyContent:"center",marginBottom:10}}>
           <img
             src="/talara-icon.png"
             alt="TALARA Logo"
             style={{
-              width:150,height:150,
+              width:110,height:110,
               objectFit:"contain",
-              filter:"drop-shadow(0 6px 20px rgba(0,0,0,0.5))",
+              filter:"drop-shadow(0 4px 16px rgba(0,0,0,0.5))",
             }}
           />
         </div>
 
         {/* Brand name */}
-        <div style={{color:"#fff",fontWeight:900,fontSize:32,letterSpacing:2,marginBottom:4}}>TALARA</div>
-        <div style={{color:"rgba(255,255,255,0.5)",fontSize:11,letterSpacing:3,fontWeight:600,marginBottom:20,textTransform:"uppercase"}}>Farm · Plantation · Fishery</div>
+        <div style={{color:"#fff",fontWeight:900,fontSize:28,letterSpacing:2,marginBottom:2}}>TALARA</div>
+        <div style={{color:"rgba(255,255,255,0.5)",fontSize:10,letterSpacing:3,fontWeight:600,marginBottom:10,textTransform:"uppercase"}}>Farm · Plantation · Fishery</div>
 
         {/* Tagline */}
-        <div style={{color:"rgba(255,255,255,0.92)",fontSize:15,fontWeight:500,lineHeight:1.6,marginBottom:8}}>
+        <div style={{color:"rgba(255,255,255,0.88)",fontSize:13,fontWeight:500,lineHeight:1.5,marginBottom:8}}>
           Super-App Pertanian & Kelautan Indonesia
         </div>
-        <div style={{display:"inline-block",background:"rgba(255,215,0,0.15)",border:"1px solid rgba(255,215,0,0.3)",borderRadius:20,padding:"4px 16px",fontSize:11,color:"#FFD700",fontWeight:700,letterSpacing:1}}>
+        <div style={{display:"inline-block",background:"rgba(255,215,0,0.15)",border:"1px solid rgba(255,215,0,0.3)",borderRadius:20,padding:"3px 14px",fontSize:10,color:"#FFD700",fontWeight:700,letterSpacing:1}}>
           FROM NATURE TO THE WORLD 🌍
         </div>
       </div>
