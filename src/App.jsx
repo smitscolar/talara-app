@@ -531,11 +531,10 @@ const Onboarding=({onDone,onLang})=>{
   const {t,lang}=useLang();
   const [step,setStep]=useState(0);
   const [imgIdx,setImgIdx]=useState(0);
-  // Foto onboarding - disimpan di repo, tidak akan berubah
   const imgs=[
-    "/onboard-pertanian.jpg",
-    "/onboard-perkebunan.jpg",
-    "/onboard-nelayan.jpg",
+    "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=85",
+    "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=85",
+    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=85",
   ];
   const imgLabels=["🌾 Pertanian","🌿 Perkebunan","🌊 Nelayan"];
   useEffect(()=>{
@@ -651,8 +650,8 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount,onLang}
   // Produk terlaris
   const TERLARIS=[...PRODS].sort((a,b)=>b.sold-a.sold).slice(0,6);
 
-  // Rekomendasi (semua produk acak)
-  const REKOM=[...PRODS].sort(()=>Math.random()-0.5);
+  // Rekomendasi - urutan tetap, tidak random
+  const REKOM=PRODS;
 
   return(
     <div style={{paddingBottom:90,background:"#F5F5F5"}}>
