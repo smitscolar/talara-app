@@ -188,7 +188,7 @@ const StatusB=({status})=>{
 const Onboarding=({onDone})=>{
   const [step,setStep]=useState(0);
   const slides=[
-    {em:"🌾🌿🌊",title:"Selamat Datang di TALARA",sub:"Super-app pertanian, perkebunan & nelayan terlengkap. Indonesia untuk Dunia.",bg:C.greenGrad},
+    {imgs:["/img-pertanian.jpg","/img-perkebunan.jpg","/img-nelayan.jpg"],title:"Selamat Datang di TALARA",sub:"Super-app pertanian, perkebunan & nelayan terlengkap. Indonesia untuk Dunia.",bg:C.greenGrad},
     {em:"🛒🚫👨‍💼",title:"Marketplace Tanpa Tengkulak",sub:"Jual beli langsung. Petani dapat harga terbaik. Pembeli dapat produk segar harga wajar.",bg:C.blueGrad},
     {em:"💰⚡🔐",title:"TALPAY — Uang Digital TALARA",sub:"1 TALPAY = Rp 500. Aman, tercatat, mudah. Topup dari bank & minimarket mana saja.",bg:C.goldGrad},
   ];
@@ -197,7 +197,12 @@ const Onboarding=({onDone})=>{
     <div style={{minHeight:"100vh",background:s.bg,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"space-between",padding:"60px 28px 48px",transition:"background 0.4s"}}>
       <div style={{textAlign:"center"}}>
         <Logo size={80}/>
-        <div style={{fontSize:70,margin:"20px 0 12px"}}>{s.em}</div>
+        {s.imgs
+          ?<div style={{display:"flex",gap:10,margin:"20px 0 12px",justifyContent:"center"}}>
+            {s.imgs.map((src,i)=><img key={i} src={src} alt="" style={{width:90,height:120,objectFit:"cover",borderRadius:14,boxShadow:"0 4px 16px rgba(0,0,0,0.25)"}}/>)}
+          </div>
+          :<div style={{fontSize:70,margin:"20px 0 12px"}}>{s.em}</div>
+        }
         <div style={{color:C.white,fontWeight:900,fontSize:24,lineHeight:1.3,marginBottom:14}}>{s.title}</div>
         <div style={{color:"rgba(255,255,255,0.85)",fontSize:15,lineHeight:1.75}}>{s.sub}</div>
       </div>
