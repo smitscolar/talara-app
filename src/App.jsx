@@ -416,11 +416,17 @@ const WelcomeScreen=({onSelect})=>{
         <div style={{position:"absolute",bottom:-40,left:-40,width:140,height:140,borderRadius:"50%",background:"rgba(255,255,255,0.04)"}}/>
         <div style={{position:"absolute",top:"30%",left:-30,width:80,height:80,borderRadius:"50%",background:"rgba(255,215,0,0.07)"}}/>
 
-        {/* Logo */}
-        <div style={{display:"flex",justifyContent:"center",marginBottom:20}}>
-          <div style={{width:110,height:110,borderRadius:28,background:"rgba(255,255,255,0.13)",border:"2px solid rgba(255,255,255,0.22)",display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(8px)"}}>
-            <Logo size={82}/>
-          </div>
+        {/* Logo resmi TALARA */}
+        <div style={{display:"flex",justifyContent:"center",marginBottom:16}}>
+          <img
+            src="/talara-logo.png"
+            alt="TALARA Logo"
+            style={{
+              width:160,height:160,
+              objectFit:"contain",
+              filter:"drop-shadow(0 4px 24px rgba(0,0,0,0.35))",
+            }}
+          />
         </div>
 
         {/* Brand name */}
