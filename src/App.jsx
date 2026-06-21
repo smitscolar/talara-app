@@ -187,22 +187,68 @@ const StatusB=({status})=>{
 // ═══════════════════════════════════════════════
 const Onboarding=({onDone})=>{
   const [step,setStep]=useState(0);
+  const [imgIdx,setImgIdx]=useState(0);
+  const imgs=["/img-pertanian.jpg","/img-perkebunan.jpg","/img-nelayan.jpg"];
+  const imgLabels=["🌾 Pertanian","🌿 Perkebunan","🌊 Nelayan"];
+  useEffect(()=>{
+    if(step!==0)return;
+    const t=setInterval(()=>setImgIdx(i=>(i+1)%3),2000);
+    return()=>clearInterval(t);
+  },[step]);
   const slides=[
-    {imgs:["/img-pertanian.jpg","/img-perkebunan.jpg","/img-nelayan.jpg"],title:"Selamat Datang di TALARA",sub:"Super-app pertanian, perkebunan & nelayan terlengkap. Indonesia untuk Dunia.",bg:C.greenGrad},
-    {em:"🛒🚫👨‍💼",title:"Marketplace Tanpa Tengkulak",sub:"Jual beli langsung. Petani dapat harga terbaik. Pembeli dapat produk segar harga wajar.",bg:C.blueGrad},
-    {em:"💰⚡🔐",title:"TALPAY — Uang Digital TALARA",sub:"1 TALPAY = Rp 500. Aman, tercatat, mudah. Topup dari bank & minimarket mana saja.",bg:C.goldGrad},
+    {type:"photo",title:"Selamat Datang di TALARA",sub:"Super-app pertanian, perkebunan & nelayan terlengkap.\nIndonesia untuk Dunia."},
+    {type:"text",em:"🛒",title:"Marketplace Tanpa Tengkulak",sub:"Jual beli langsung. Petani dapat harga terbaik. Pembeli dapat produk segar harga wajar.",bg:C.blueGrad,icons:["🌾","➡️","🏠","🍽️","🚢"]},
+    {type:"text",em:"💰",title:"TALPAY — Uang Digital TALARA",sub:"1 TALPAY = Rp 500. Aman, tercatat, mudah. Topup dari bank & minimarket mana saja.",bg:C.goldGrad,icons:["🏦","🏧","🏪","📱","✅"]},
   ];
   const s=slides[step];
+
+  if(s.type==="photo"){
+    return(
+      <div style={{minHeight:"100vh",position:"relative",display:"flex",flexDirection:"column",justifyContent:"space-between",overflow:"hidden"}}>
+        {/* Background photo fullscreen with crossfade */}
+        {imgs.map((src,i)=>(
+          <img key={i} src={src} alt="" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",opacity:imgIdx===i?1:0,transition:"opacity 1s ease-in-out",zIndex:0}}/>
+        ))}
+        {/* Dark gradient overlay */}
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,30,10,0.6) 50%, rgba(0,0,0,0.82) 100%)",zIndex:1}}/>
+        {/* Top: logo */}
+        <div style={{position:"relative",zIndex:2,padding:"56px 24px 0",textAlign:"center"}}>
+          <Logo size={72}/>
+          <div style={{color:C.white,fontWeight:900,fontSize:13,letterSpacing:3,marginTop:8,opacity:0.8}}>FARM · PLANTATION · AQUACULTURE · FISHERY</div>
+        </div>
+        {/* Center: label badge */}
+        <div style={{position:"relative",zIndex:2,textAlign:"center"}}>
+          <div style={{display:"inline-block",background:"rgba(255,255,255,0.18)",backdropFilter:"blur(8px)",border:"1px solid rgba(255,255,255,0.3)",borderRadius:24,padding:"8px 22px",color:C.white,fontSize:15,fontWeight:700,letterSpacing:1}}>
+            {imgLabels[imgIdx]}
+          </div>
+        </div>
+        {/* Bottom: title, dots, button */}
+        <div style={{position:"relative",zIndex:2,padding:"0 24px 48px"}}>
+          <div style={{textAlign:"center",marginBottom:28}}>
+            <div style={{color:C.white,fontWeight:900,fontSize:28,lineHeight:1.25,marginBottom:12,textShadow:"0 2px 12px rgba(0,0,0,0.5)"}}>{s.title}</div>
+            <div style={{color:"rgba(255,255,255,0.85)",fontSize:14,lineHeight:1.8,whiteSpace:"pre-line"}}>{s.sub}</div>
+          </div>
+          {/* Photo indicator dots */}
+          <div style={{display:"flex",gap:6,justifyContent:"center",marginBottom:24}}>
+            {imgs.map((_,i)=><div key={i} style={{width:i===imgIdx?24:7,height:7,borderRadius:4,background:i===imgIdx?"white":"rgba(255,255,255,0.4)",transition:"all 0.4s"}}/>)}
+          </div>
+          {/* Slide dots */}
+          <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:20}}>
+            {slides.map((_,i)=><div key={i} style={{width:i===step?28:8,height:8,borderRadius:4,background:i===step?"white":"rgba(255,255,255,0.35)",transition:"all 0.3s"}}/>)}
+          </div>
+          <Btn full onClick={()=>setStep(1)} style={{borderRadius:16,fontSize:16,padding:"14px 0",background:C.white,color:C.green,fontWeight:800}}>Lanjut →</Btn>
+          <div onClick={onDone} style={{textAlign:"center",color:"rgba(255,255,255,0.6)",fontSize:13,marginTop:14,cursor:"pointer"}}>Lewati</div>
+        </div>
+      </div>
+    );
+  }
+
   return(
     <div style={{minHeight:"100vh",background:s.bg,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"space-between",padding:"60px 28px 48px",transition:"background 0.4s"}}>
       <div style={{textAlign:"center"}}>
         <Logo size={80}/>
-        {s.imgs
-          ?<div style={{display:"flex",gap:0,margin:"20px 0 12px",justifyContent:"center",borderRadius:16,overflow:"hidden",boxShadow:"0 6px 24px rgba(0,0,0,0.3)"}}>
-            {s.imgs.map((src,i)=><img key={i} src={src} alt="" style={{width:90,height:120,objectFit:"cover",display:"block"}}/>)}
-          </div>
-          :<div style={{fontSize:70,margin:"20px 0 12px"}}>{s.em}</div>
-        }
+        <div style={{fontSize:72,margin:"20px 0 8px"}}>{s.em}</div>
+        {s.icons&&<div style={{display:"flex",gap:10,justifyContent:"center",fontSize:26,marginBottom:8}}>{s.icons.map((ic,i)=><span key={i}>{ic}</span>)}</div>}
         <div style={{color:C.white,fontWeight:900,fontSize:24,lineHeight:1.3,marginBottom:14}}>{s.title}</div>
         <div style={{color:"rgba(255,255,255,0.85)",fontSize:15,lineHeight:1.75}}>{s.sub}</div>
       </div>
