@@ -530,7 +530,11 @@ const Onboarding=({onDone,onLang})=>{
   const {t,lang}=useLang();
   const [step,setStep]=useState(0);
   const [imgIdx,setImgIdx]=useState(0);
-  const imgs=["/img-pertanian.jpg","/img-perkebunan.jpg","/img-nelayan.jpg"];
+  const imgs=[
+    "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=400&q=80",
+    "https://images.unsplash.com/photo-1625924305571-1c5bb90e4f6e?w=400&q=80",
+    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&q=80",
+  ];
   const imgLabels=["🌾 Pertanian","🌿 Perkebunan","🌊 Nelayan"];
   useEffect(()=>{
     if(step!==0)return;
@@ -546,20 +550,23 @@ const Onboarding=({onDone,onLang})=>{
 
   if(s.type==="photo"){
     return(
-      <div style={{minHeight:"100vh",background:C.greenGrad,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"space-between",padding:"60px 28px 48px"}}>
+      <div style={{minHeight:"100vh",background:C.greenGrad,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"space-between",padding:"40px 20px 36px"}}>
         <div style={{textAlign:"center",width:"100%"}}>
-          <Logo size={80}/>
+          {/* Logo center */}
+          <div style={{display:"flex",justifyContent:"center",marginBottom:20}}>
+            <img src="/talara-icon.png" alt="TALARA" style={{width:72,height:72,objectFit:"contain",filter:"drop-shadow(0 4px 12px rgba(0,0,0,0.4))"}} onError={e=>{e.target.style.display="none";}}/>
+          </div>
           {/* 3 foto berjejer, seamless, rounded */}
-          <div style={{display:"flex",margin:"24px 0 16px",borderRadius:18,overflow:"hidden",boxShadow:"0 8px 32px rgba(0,0,0,0.28)"}}>
+          <div style={{display:"flex",margin:"0 0 20px",borderRadius:18,overflow:"hidden",boxShadow:"0 8px 32px rgba(0,0,0,0.28)",height:170}}>
             {imgs.map((src,i)=>(
-              <img key={i} src={src} alt="" style={{flex:1,height:160,objectFit:"cover",display:"block"}}/>
+              <img key={i} src={src} alt="" style={{flex:1,height:"100%",objectFit:"cover",display:"block"}}/>
             ))}
           </div>
           <div style={{color:C.white,fontWeight:900,fontSize:24,lineHeight:1.3,marginBottom:10}}>{s.title}</div>
-          <div style={{color:"rgba(255,255,255,0.85)",fontSize:15,lineHeight:1.75}}>{s.sub}</div>
+          <div style={{color:"rgba(255,255,255,0.85)",fontSize:14,lineHeight:1.7}}>{s.sub}</div>
         </div>
-        <div style={{width:"100%"}}>
-          <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:32}}>
+        <div style={{width:"100%",marginTop:24}}>
+          <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:24}}>
             {slides.map((_,i)=><div key={i} style={{width:i===step?28:8,height:8,borderRadius:4,background:i===step?"white":"rgba(255,255,255,0.35)",transition:"all 0.3s"}}/>)}
           </div>
           <Btn full onClick={()=>setStep(1)} style={{borderRadius:16,fontSize:16,padding:"14px 0",background:C.white,color:C.green,fontWeight:800}}>{t.next}</Btn>
