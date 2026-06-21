@@ -560,132 +560,271 @@ const Onboarding=({onDone,onLang})=>{
 const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount,onLang})=>{
   const {t}=useLang();
   const [search,setSearch]=useState("");
-  const [cat,setCat]=useState("semua");
-  const filtered=PRODS.filter(p=>(cat==="semua"||p.cat===cat)&&(search===""||p.name.toLowerCase().includes(search.toLowerCase())));
+  const [bannerIdx,setBannerIdx]=useState(0);
+
+  // Banner slider auto-play
+  const BANNERS=[
+    {bg:"linear-gradient(90deg,#1B6B2F 0%,#2E8B46 100%)",em:"🚚",title:t.promo_title,sub:t.promo_sub,badge:t.promo_until,color:"#FFD700"},
+    {bg:"linear-gradient(90deg,#0D47A1 0%,#1565C0 100%)",em:"💰",title:"Flash Sale TALPAY",sub:"Topup & Hemat Lebih Banyak",badge:"Hari Ini Saja!",color:"#FFD700"},
+    {bg:"linear-gradient(90deg,#B71C1C 0%,#E53935 100%)",em:"🌾",title:"Panen Raya Tiba",sub:"Harga langsung dari petani",badge:"Stok Terbatas",color:"#fff"},
+  ];
+
+  useEffect(()=>{
+    const t=setInterval(()=>setBannerIdx(i=>(i+1)%BANNERS.length),3000);
+    return()=>clearInterval(t);
+  },[]);
+
+  // Kategori lengkap Shopee-style (2 baris x 5)
+  const CAT_GRID=[
+    {em:"🌾",label:"Pertanian",k:"pertanian",color:"#E8F5E9",border:"#2E7D32"},
+    {em:"🌿",label:"Perkebunan",k:"perkebunan",color:"#F1F8E9",border:"#558B2F"},
+    {em:"🌊",label:"Nelayan",k:"nelayan",color:"#E3F2FD",border:"#1565C0"},
+    {em:"🚜",label:"Peralatan",k:"peralatan",color:"#FFF3E0",border:"#E65100"},
+    {em:"🎣",label:"Pancing",k:"pancing",color:"#E8EAF6",border:"#283593"},
+    {em:"🌴",label:"Sawit",k:"perkebunan",color:"#FFFDE7",border:"#F9A825"},
+    {em:"🦐",label:"Budidaya",k:"nelayan",color:"#E0F7FA",border:"#00838F"},
+    {em:"☕",label:"Kopi/Kakao",k:"perkebunan",color:"#EFEBE9",border:"#4E342E"},
+    {em:"🌶️",label:"Hortikultura",k:"pertanian",color:"#FCE4EC",border:"#C62828"},
+    {em:"📦",label:"Semua",k:"semua",color:"#F3E5F5",border:"#6A1B9A"},
+  ];
+
+  // Flash sale produk (ambil 4 produk dengan diskon simulasi)
+  const FLASH=[
+    {...PRODS[0],disc:15},{...PRODS[2],disc:30},{...PRODS[3],disc:20},{...PRODS[5],disc:25},
+  ];
+
+  // Produk terlaris
+  const TERLARIS=[...PRODS].sort((a,b)=>b.sold-a.sold).slice(0,6);
+
+  // Rekomendasi (semua produk acak)
+  const REKOM=[...PRODS].sort(()=>Math.random()-0.5);
+
   return(
-    <div style={{paddingBottom:90}}>
-      <div style={{background:C.greenGrad,padding:"18px 16px 22px"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
-          <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <Logo size={38}/>
+    <div style={{paddingBottom:90,background:"#F5F5F5"}}>
+      {/* HEADER */}
+      <div style={{background:C.greenGrad,padding:"14px 14px 18px"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <Logo size={34}/>
             <div>
-              <div style={{color:C.white,fontWeight:900,fontSize:19,letterSpacing:0.5}}>TALARA</div>
-              <div style={{color:"rgba(255,255,255,0.65)",fontSize:9}}>Farm·Plantation·Aquaculture·Fishery</div>
+              <div style={{color:C.white,fontWeight:900,fontSize:17,letterSpacing:0.5}}>TALARA</div>
+              <div style={{color:"rgba(255,255,255,0.65)",fontSize:8}}>Farm·Plantation·Fishery</div>
             </div>
           </div>
-          <div style={{display:"flex",gap:8}}>
-            <button onClick={onLang} style={{background:"rgba(255,255,255,0.2)",border:"none",color:C.white,borderRadius:10,width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:18}}>🌍</button>
-            <button onClick={()=>onNav("notif")} style={{background:"rgba(255,255,255,0.2)",border:"none",color:C.white,borderRadius:10,width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",position:"relative",fontSize:18}}>
+          <div style={{display:"flex",gap:6}}>
+            <button onClick={onLang} style={{background:"rgba(255,255,255,0.18)",border:"none",color:C.white,borderRadius:10,width:34,height:34,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:17}}>🌍</button>
+            <button onClick={()=>onNav("notif")} style={{background:"rgba(255,255,255,0.18)",border:"none",color:C.white,borderRadius:10,width:34,height:34,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",position:"relative",fontSize:17}}>
               🔔{notifCount>0&&<span style={{position:"absolute",top:-3,right:-3,background:C.danger,color:C.white,fontSize:8,borderRadius:10,padding:"1px 4px",fontWeight:800}}>{notifCount}</span>}
             </button>
-            <button onClick={()=>onNav("cart")} style={{background:"rgba(255,255,255,0.2)",border:"none",color:C.white,borderRadius:10,width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",position:"relative",fontSize:18}}>
+            <button onClick={()=>onNav("cart")} style={{background:"rgba(255,255,255,0.18)",border:"none",color:C.white,borderRadius:10,width:34,height:34,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",position:"relative",fontSize:17}}>
               🛒{cartCount>0&&<span style={{position:"absolute",top:-3,right:-3,background:C.danger,color:C.white,fontSize:8,borderRadius:10,padding:"1px 4px",fontWeight:800}}>{cartCount}</span>}
             </button>
           </div>
         </div>
         <Inp ph={t.search} val={search} onChange={e=>setSearch(e.target.value)} icon="🔍"/>
       </div>
-      <div style={{padding:"0 16px"}}>
-        {/* TALPAY */}
-        <div onClick={()=>onNav("talpay")} style={{background:C.goldGrad,borderRadius:16,padding:"12px 16px",marginTop:14,cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",boxShadow:"0 4px 15px rgba(245,200,66,0.35)"}}>
-          <div>
-            <div style={{fontWeight:800,fontSize:13,color:C.dark}}>💰 {t.balance}</div>
-            <div style={{fontSize:24,fontWeight:900,color:C.dark,lineHeight:1}}>2.500 <span style={{fontSize:13}}>TP</span></div>
-            <div style={{fontSize:11,color:C.dark+"88"}}>= Rp 1.250.000</div>
-          </div>
-          <div style={{textAlign:"right"}}>
-            <div style={{fontSize:10,color:C.dark,opacity:.7}}>1 TP = Rp 500</div>
-            <div style={{marginTop:8,background:"rgba(0,0,0,0.12)",borderRadius:8,padding:"4px 12px",fontSize:12,color:C.dark,fontWeight:700}}>Kelola ›</div>
-          </div>
-        </div>
 
-        {/* Quick Actions */}
-        <div style={{display:"flex",gap:6,marginTop:14}}>
-          {[{em:"🛒",l:t.buy,a:"market"},{em:"🔴",l:t.live,a:"live_list"},{em:"📤",l:t.sell,a:"jual"},{em:"💱",l:"TALPAY",a:"talpay"},{em:"📊",l:t.price,a:"info"},{em:"🌤️",l:t.weather,a:"cuaca"}].map(q=>(
-            <button key={q.l} onClick={()=>onNav(q.a)} style={{flex:1,background:C.white,border:"none",borderRadius:12,padding:"10px 2px",cursor:"pointer",boxShadow:"0 1px 6px rgba(0,0,0,0.07)",display:"flex",flexDirection:"column",alignItems:"center",gap:3,fontFamily:"inherit"}}>
-              <span style={{fontSize:20}}>{q.em}</span>
-              <span style={{fontSize:9,fontWeight:700,color:C.mid}}>{q.l}</span>
+      {/* BANNER SLIDER */}
+      <div style={{position:"relative",height:100,overflow:"hidden",cursor:"pointer"}} onClick={()=>onNav("market")}>
+        {BANNERS.map((b,i)=>(
+          <div key={i} style={{
+            position:"absolute",inset:0,
+            background:b.bg,
+            display:"flex",justifyContent:"space-between",alignItems:"center",
+            padding:"0 20px",
+            opacity:i===bannerIdx?1:0,
+            transition:"opacity 0.5s",
+          }}>
+            <div>
+              <div style={{color:"#fff",fontWeight:900,fontSize:15}}>{b.title}</div>
+              <div style={{color:"rgba(255,255,255,0.85)",fontSize:11,marginTop:2}}>{b.sub}</div>
+              <div style={{marginTop:6,background:b.color,borderRadius:20,padding:"2px 10px",display:"inline-block",fontSize:10,color:"#1a1a1a",fontWeight:700}}>{b.badge}</div>
+            </div>
+            <div style={{fontSize:48}}>{b.em}</div>
+          </div>
+        ))}
+        {/* Dots */}
+        <div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4}}>
+          {BANNERS.map((_,i)=>(
+            <div key={i} style={{width:i===bannerIdx?16:5,height:5,borderRadius:3,background:i===bannerIdx?"#fff":"rgba(255,255,255,0.5)",transition:"all 0.3s"}}/>
+          ))}
+        </div>
+      </div>
+
+      {/* QUICK ACTIONS */}
+      <div style={{background:"#fff",padding:"12px 14px 10px",marginBottom:8}}>
+        <div style={{display:"flex",gap:0,justifyContent:"space-around"}}>
+          {[
+            {em:"🛒",l:t.buy,a:"market"},
+            {em:"🔴",l:t.live,a:"live_list"},
+            {em:"📤",l:t.sell,a:"jual"},
+            {em:"💰",l:"TALPAY",a:"talpay"},
+            {em:"📊",l:t.price,a:"info"},
+          ].map(q=>(
+            <button key={q.l} onClick={()=>onNav(q.a)} style={{flex:1,background:"none",border:"none",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:4,fontFamily:"inherit",padding:"4px 2px"}}>
+              <div style={{width:44,height:44,borderRadius:12,background:"#E8F5E9",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>
+                {q.em}
+              </div>
+              <span style={{fontSize:9,fontWeight:700,color:"#555",textAlign:"center",lineHeight:1.2}}>{q.l}</span>
             </button>
           ))}
         </div>
+      </div>
 
-        {/* Promo Banner */}
-        <div style={{borderRadius:16,marginTop:14,overflow:"hidden",position:"relative",height:90,cursor:"pointer"}}>
-          <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&q=80" alt="promo" style={{width:"100%",height:"100%",objectFit:"cover",position:"absolute",inset:0}}/>
-          <div style={{position:"absolute",inset:0,background:"linear-gradient(90deg,rgba(21,101,168,0.92) 0%,rgba(46,155,63,0.85) 100%)",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"0 18px"}}>
-            <div>
-              <div style={{color:C.white,fontWeight:800,fontSize:14}}>{t.promo_title}</div>
-              <div style={{color:"rgba(255,255,255,0.85)",fontSize:12,marginTop:3}}>{t.promo_sub}</div>
-              <div style={{marginTop:6}}><Badge color={C.gold}>{t.promo_until}</Badge></div>
+      {/* KATEGORI GRID (Shopee-style 2 rows x 5) */}
+      <div style={{background:"#fff",padding:"14px 14px 10px",marginBottom:8}}>
+        <div style={{fontWeight:800,fontSize:13,color:"#1a1a1a",marginBottom:10}}>📂 Kategori</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8}}>
+          {CAT_GRID.map((c,i)=>(
+            <div key={i} onClick={()=>onNav("market")} style={{display:"flex",flexDirection:"column",alignItems:"center",cursor:"pointer",gap:4}}>
+              <div style={{
+                width:46,height:46,borderRadius:14,
+                background:c.color,border:`1.5px solid ${c.border}22`,
+                display:"flex",alignItems:"center",justifyContent:"center",
+                fontSize:22,boxShadow:"0 1px 4px rgba(0,0,0,0.07)"
+              }}>{c.em}</div>
+              <div style={{fontSize:9,fontWeight:600,color:"#444",textAlign:"center",lineHeight:1.2}}>{c.label}</div>
             </div>
-            <div style={{fontSize:44}}>🚚</div>
+          ))}
+        </div>
+      </div>
+
+      {/* TALPAY WALLET */}
+      <div style={{padding:"0 12px",marginBottom:8}}>
+        <div onClick={()=>onNav("talpay")} style={{background:C.goldGrad,borderRadius:14,padding:"12px 16px",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",boxShadow:"0 3px 12px rgba(245,200,66,0.3)"}}>
+          <div>
+            <div style={{fontWeight:800,fontSize:12,color:C.dark}}>💰 {t.balance}</div>
+            <div style={{fontSize:22,fontWeight:900,color:C.dark,lineHeight:1.1}}>2.500 <span style={{fontSize:12}}>TP</span></div>
+            <div style={{fontSize:10,color:C.dark+"88"}}>= Rp 1.250.000 · 1 TP = Rp 500</div>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <div style={{background:"rgba(0,0,0,0.12)",borderRadius:8,padding:"5px 14px",fontSize:11,color:C.dark,fontWeight:700}}>Kelola ›</div>
           </div>
         </div>
+      </div>
 
-        {/* Live */}
-        <div style={{marginTop:18}}>
-          <SH title={t.live_now} action={t.see_all} onAction={()=>onNav("live_list")}/>
-          <div style={{display:"flex",gap:12,overflowX:"auto",paddingBottom:6}}>
-            {LIVES.map(ls=>(
-              <div key={ls.id} onClick={()=>onLive(ls)} style={{flex:"0 0 138px",borderRadius:16,overflow:"hidden",cursor:"pointer",height:188,position:"relative"}}>
-                <img src={getProdImg(ls.id,ls.img,"l")} alt={ls.product} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}/>
-                <div style={{background:`linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.75) 100%)`,position:"absolute",inset:0,display:"flex",flexDirection:"column",justifyContent:"space-between",padding:10}}>
-                  <div style={{display:"flex",justifyContent:"space-between"}}>
-                    <span style={{background:C.danger,color:C.white,fontSize:8,fontWeight:800,padding:"2px 7px",borderRadius:20}}>● LIVE</span>
-                    <span style={{background:"rgba(0,0,0,0.5)",color:C.white,fontSize:9,padding:"2px 6px",borderRadius:20}}>👁{ls.viewers}</span>
-                  </div>
-                  <div>
-                    <div style={{fontSize:11,fontWeight:700,color:C.white}}>{ls.seller}</div>
-                    <div style={{fontSize:9,color:"rgba(255,255,255,0.8)"}}>{ls.product}</div>
-                    <div style={{fontSize:10,color:C.gold,fontWeight:700,marginTop:3}}>Rp {fmt(ls.price)}/{PRODS.find(p=>p.sId===ls.sId)?.unit||"kg"}</div>
-                  </div>
+      {/* FLASH SALE */}
+      <div style={{background:"#fff",padding:"14px 14px 14px",marginBottom:8}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
+            <span style={{fontSize:18}}>⚡</span>
+            <span style={{fontWeight:900,fontSize:14,color:"#C62828"}}>FLASH SALE</span>
+            <span style={{background:"#C62828",color:"#fff",fontSize:9,fontWeight:800,padding:"2px 8px",borderRadius:20}}>Hari Ini</span>
+          </div>
+          <span onClick={()=>onNav("market")} style={{fontSize:11,color:C.green,fontWeight:700,cursor:"pointer"}}>Lihat Semua ›</span>
+        </div>
+        <div style={{display:"flex",gap:10,overflowX:"auto",paddingBottom:4}}>
+          {FLASH.map((p,i)=>(
+            <div key={i} onClick={()=>onProduct(p)} style={{flex:"0 0 120px",background:"#fff",borderRadius:12,border:"1px solid #f0f0f0",overflow:"hidden",cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.08)"}}>
+              <div style={{height:100,overflow:"hidden",position:"relative"}}>
+                <img src={getProdImg(p.id,p.img,"p")} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+                <div style={{display:"none",background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:"100%",alignItems:"center",justifyContent:"center",fontSize:36,position:"absolute",inset:0}}>{p.em}</div>
+                <div style={{position:"absolute",top:4,left:4,background:"#C62828",color:"#fff",fontSize:9,fontWeight:800,padding:"2px 6px",borderRadius:8}}>-{p.disc}%</div>
+              </div>
+              <div style={{padding:"6px 8px 8px"}}>
+                <div style={{fontSize:10,fontWeight:700,color:"#1a1a1a",lineHeight:1.3,marginBottom:3,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical"}}>{p.name}</div>
+                <div style={{fontSize:12,fontWeight:900,color:"#C62828"}}>Rp {fmt(Math.round(p.price*(1-p.disc/100)))}</div>
+                <div style={{fontSize:9,color:"#aaa",textDecoration:"line-through"}}>Rp {fmt(p.price)}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* LIVE SEKARANG */}
+      <div style={{background:"#fff",padding:"14px 14px 14px",marginBottom:8}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
+            <span style={{width:8,height:8,borderRadius:"50%",background:"#E53935",display:"inline-block",boxShadow:"0 0 0 2px rgba(229,57,53,0.3)"}}/>
+            <span style={{fontWeight:900,fontSize:14,color:"#1a1a1a"}}>{t.live_now}</span>
+          </div>
+          <span onClick={()=>onNav("live_list")} style={{fontSize:11,color:C.green,fontWeight:700,cursor:"pointer"}}>{t.see_all} ›</span>
+        </div>
+        <div style={{display:"flex",gap:10,overflowX:"auto",paddingBottom:4}}>
+          {LIVES.map(ls=>(
+            <div key={ls.id} onClick={()=>onLive(ls)} style={{flex:"0 0 130px",borderRadius:14,overflow:"hidden",cursor:"pointer",height:175,position:"relative",boxShadow:"0 2px 10px rgba(0,0,0,0.15)"}}>
+              <img src={getProdImg(ls.id,ls.img,"l")} alt={ls.product} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}/>
+              <div style={{background:"linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.75) 100%)",position:"absolute",inset:0,display:"flex",flexDirection:"column",justifyContent:"space-between",padding:8}}>
+                <div style={{display:"flex",justifyContent:"space-between"}}>
+                  <span style={{background:"#E53935",color:"#fff",fontSize:8,fontWeight:800,padding:"2px 6px",borderRadius:20}}>● LIVE</span>
+                  <span style={{background:"rgba(0,0,0,0.5)",color:"#fff",fontSize:9,padding:"2px 5px",borderRadius:20}}>👁{ls.viewers}</span>
+                </div>
+                <div>
+                  <div style={{fontSize:10,fontWeight:700,color:"#fff",lineHeight:1.3}}>{ls.seller}</div>
+                  <div style={{fontSize:8,color:"rgba(255,255,255,0.8)",marginTop:1}}>{ls.product}</div>
+                  <div style={{fontSize:10,color:"#FFD700",fontWeight:700,marginTop:2}}>Rp {fmt(ls.price)}</div>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* Stats */}
-        <Card style={{marginTop:14,background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`}}>
-          <div style={{fontWeight:800,fontSize:13,color:C.dark,marginBottom:10}}>📊 TALARA — Siap Diluncurkan</div>
-          <div style={{display:"flex",justifyContent:"space-around",textAlign:"center"}}>
-            {[["5","Kategori Produk"],["3","Provinsi Pilot"],["1 TP","= Rp 500"],["100%","Fitur Siap Uji"]].map(([v,l])=>(
-              <div key={l}><div style={{fontSize:15,fontWeight:900,color:C.green}}>{v}</div><div style={{fontSize:9,color:C.mid,marginTop:2}}>{l}</div></div>
-            ))}
+      {/* PRODUK TERLARIS */}
+      <div style={{background:"#fff",padding:"14px 14px 14px",marginBottom:8}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
+            <span style={{fontSize:16}}>🔥</span>
+            <span style={{fontWeight:900,fontSize:14,color:"#1a1a1a"}}>Produk Terlaris</span>
           </div>
-        </Card>
-
-        {/* Cats */}
-        <div style={{marginTop:18}}>
-          <SH title={t.category}/>
-          <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:6}}>
-            {CATS.map(c=><Chip key={c.k} active={cat===c.k} onClick={()=>setCat(c.k)}>{c.em} {t[c.k]||c.l}</Chip>)}
-          </div>
+          <span onClick={()=>onNav("market")} style={{fontSize:11,color:C.green,fontWeight:700,cursor:"pointer"}}>Lihat Semua ›</span>
         </div>
+        <div style={{display:"flex",gap:10,overflowX:"auto",paddingBottom:4}}>
+          {TERLARIS.map((p,i)=>(
+            <div key={p.id} onClick={()=>onProduct(p)} style={{flex:"0 0 110px",cursor:"pointer"}}>
+              <div style={{width:110,height:110,borderRadius:12,overflow:"hidden",position:"relative",boxShadow:"0 2px 8px rgba(0,0,0,0.1)"}}>
+                <img src={getProdImg(p.id,p.img,"p")} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+                <div style={{display:"none",background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:"100%",alignItems:"center",justifyContent:"center",fontSize:36,position:"absolute",inset:0}}>{p.em}</div>
+                {i<3&&<div style={{position:"absolute",top:4,left:4,background:["#FFD700","#C0C0C0","#CD7F32"][i],color:"#fff",fontSize:8,fontWeight:900,padding:"1px 5px",borderRadius:6}}>#{i+1}</div>}
+              </div>
+              <div style={{marginTop:5}}>
+                <div style={{fontSize:10,fontWeight:700,color:"#1a1a1a",lineHeight:1.2,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical"}}>{p.name}</div>
+                <div style={{fontSize:11,fontWeight:900,color:C.green,marginTop:2}}>Rp {fmt(p.price)}</div>
+                <div style={{fontSize:9,color:"#aaa"}}>{p.sold} terjual</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-        {/* Products */}
-        <div style={{marginTop:14}}>
-          <SH title={`${cat==="semua"?t.latest:t[cat]||CATS.find(c=>c.k===cat)?.l} (${filtered.length})`} action={t.see_all} onAction={()=>onNav("market")}/>
-          <div style={{display:"flex",flexWrap:"wrap",gap:10}}>
-            {filtered.map(p=>(
-              <div key={p.id} style={{flex:"0 0 calc(50% - 5px)",background:C.white,borderRadius:14,overflow:"hidden",boxShadow:"0 2px 12px rgba(0,0,0,0.09)",cursor:"pointer"}} onClick={()=>onProduct(p)}>
-                <div style={{height:110,overflow:"hidden",position:"relative"}}>
-                  <img src={getProdImg(p.id,p.img,"p")} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
-                  <div style={{display:"none",background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:"100%",alignItems:"center",justifyContent:"center",fontSize:44,position:"absolute",inset:0}}>{p.em}</div>
-                </div>
-                <div style={{padding:"10px 10px 12px"}}>
-                  <div style={{fontSize:12,fontWeight:700,color:C.dark,lineHeight:1.3,marginBottom:3}}>{p.name}</div>
-                  <div style={{fontSize:10,color:C.grayMid,marginBottom:4}}>📍{p.loc.split(",")[0]}</div>
-                  <div style={{fontSize:13,fontWeight:900,color:C.green}}>Rp {fmt(p.price)}<span style={{fontSize:9,fontWeight:400,color:C.mid}}>/{p.unit}</span></div>
-                  <div style={{margin:"4px 0"}}><TpB amt={p.tp}/></div>
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                    <span style={{fontSize:9,color:C.grayMid}}>⭐{p.rating}·{p.sold} terjual</span>
-                    <button onClick={e=>{e.stopPropagation();onAddCart(p);}} style={{background:C.green,color:C.white,border:"none",borderRadius:8,width:24,height:24,fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>+</button>
-                  </div>
+      {/* STATS BANNER */}
+      <div style={{margin:"0 12px 8px",background:`linear-gradient(135deg,${C.green},#2E8B46)`,borderRadius:14,padding:"12px 16px"}}>
+        <div style={{fontWeight:800,fontSize:12,color:"#fff",marginBottom:8}}>📊 TALARA — Siap Diluncurkan</div>
+        <div style={{display:"flex",justifyContent:"space-around",textAlign:"center"}}>
+          {[["5","Kategori"],["3","Provinsi Pilot"],["1 TP","= Rp 500"],["100%","Fitur Siap"]].map(([v,l])=>(
+            <div key={l}>
+              <div style={{fontSize:14,fontWeight:900,color:"#FFD700"}}>{v}</div>
+              <div style={{fontSize:8,color:"rgba(255,255,255,0.8)",marginTop:1}}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* REKOMENDASI UNTUK ANDA */}
+      <div style={{background:"#fff",padding:"14px 14px 14px",marginBottom:8}}>
+        <div style={{textAlign:"center",marginBottom:10}}>
+          <div style={{fontWeight:900,fontSize:14,color:"#1a1a1a"}}>⭐ Rekomendasi Untuk Anda</div>
+          <div style={{width:40,height:3,background:C.green,borderRadius:2,margin:"6px auto 0"}}/>
+        </div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+          {REKOM.map(p=>(
+            <div key={p.id} style={{flex:"0 0 calc(50% - 4px)",background:"#fff",borderRadius:12,overflow:"hidden",boxShadow:"0 1px 8px rgba(0,0,0,0.08)",cursor:"pointer",border:"1px solid #f0f0f0"}} onClick={()=>onProduct(p)}>
+              <div style={{height:120,overflow:"hidden",position:"relative"}}>
+                <img src={getProdImg(p.id,p.img,"p")} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+                <div style={{display:"none",background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:"100%",alignItems:"center",justifyContent:"center",fontSize:44,position:"absolute",inset:0}}>{p.em}</div>
+              </div>
+              <div style={{padding:"8px 10px 10px"}}>
+                <div style={{fontSize:11,fontWeight:700,color:"#1a1a1a",lineHeight:1.3,marginBottom:2}}>{p.name}</div>
+                <div style={{fontSize:9,color:"#aaa",marginBottom:3}}>📍{p.loc.split(",")[0]}</div>
+                <div style={{fontSize:13,fontWeight:900,color:C.green}}>Rp {fmt(p.price)}<span style={{fontSize:9,fontWeight:400,color:"#aaa"}}>/{p.unit}</span></div>
+                <div style={{margin:"3px 0"}}><TpB amt={p.tp}/></div>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:4}}>
+                  <span style={{fontSize:9,color:"#aaa"}}>⭐{p.rating} · {p.sold} terjual</span>
+                  <button onClick={e=>{e.stopPropagation();onAddCart(p);}} style={{background:C.green,color:"#fff",border:"none",borderRadius:8,width:26,height:26,fontSize:16,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>+</button>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
