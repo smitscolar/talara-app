@@ -1877,101 +1877,6 @@ const AboutScreen=({onBack})=>(
 // ═══════════════════════════════════════════════
 // PROFIL
 // ═══════════════════════════════════════════════
-// ═══════════════════════════════════════════════
-// ADMIN PHOTO MANAGER (TEMPORARY - for dev use)
-// ═══════════════════════════════════════════════
-const PHOTO_KEY="talara_prod_photos";
-const getStoredPhotos=()=>{try{return JSON.parse(localStorage.getItem(PHOTO_KEY)||"{}");}catch{return {};}};
-const saveStoredPhotos=(obj)=>localStorage.setItem(PHOTO_KEY,JSON.stringify(obj));
-
-const AdminPhotoScreen=({onBack})=>{
-  const [photos,setPhotos]=useState(getStoredPhotos);
-  const [saving,setSaving]=useState(null);
-
-  const handleFile=(key,e)=>{
-    const file=e.target.files[0];
-    if(!file)return;
-    if(file.size>5*1024*1024){alert("Foto max 5MB!");return;}
-    setSaving(key);
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      const updated={...photos,[key]:ev.target.result};
-      setPhotos(updated);
-      saveStoredPhotos(updated);
-      setSaving(null);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const hapusFoto=(key)=>{
-    const updated={...photos};
-    delete updated[key];
-    setPhotos(updated);
-    saveStoredPhotos(updated);
-  };
-
-  const ItemRow=({itemKey,name,em,cat,defaultImg})=>{
-    const hasCustom=!!photos[itemKey];
-    return(
-      <div style={{background:"#fff",borderRadius:14,padding:"12px 14px",marginBottom:10,boxShadow:"0 2px 10px rgba(0,0,0,0.07)",border:`1.5px solid ${hasCustom?"#1B6B2F":"#E5E7EB"}`}}>
-        <div style={{display:"flex",gap:12,alignItems:"center"}}>
-          <div style={{width:70,height:70,borderRadius:10,overflow:"hidden",background:"#F3F4F6",flexShrink:0,position:"relative"}}>
-            <img src={hasCustom?photos[itemKey]:defaultImg} alt={name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";}}/>
-            <div style={{position:"absolute",bottom:0,left:0,right:0,background:hasCustom?"rgba(27,107,47,0.85)":"rgba(0,0,0,0.5)",fontSize:8,color:"#fff",textAlign:"center",padding:"2px"}}>{hasCustom?"✅ custom":"default"}</div>
-          </div>
-          <div style={{flex:1,minWidth:0}}>
-            <div style={{fontWeight:700,fontSize:13,color:"#1a1a1a",marginBottom:2}}>{em} {name}</div>
-            <div style={{fontSize:11,color:"#6B7280",marginBottom:8}}>{cat}</div>
-            <div style={{display:"flex",gap:6}}>
-              <label style={{flex:1,background:hasCustom?"#E8F5E9":"#1B6B2F",color:hasCustom?"#1B6B2F":"#fff",border:"1.5px solid #1B6B2F",borderRadius:8,padding:"6px 0",fontSize:11,fontWeight:700,textAlign:"center",cursor:"pointer",display:"block"}}>
-                {saving===itemKey?"⏳ Menyimpan...":(hasCustom?"🔄 Ganti":"📷 Upload")}
-                <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>handleFile(itemKey,e)} disabled={saving===itemKey}/>
-              </label>
-              {hasCustom&&(
-                <button onClick={()=>hapusFoto(itemKey)} style={{background:"#FEE2E2",color:"#DC2626",border:"1.5px solid #DC2626",borderRadius:8,padding:"6px 10px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🗑️</button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const totalCustom=Object.keys(photos).length;
-  const totalItems=PRODS.length+LIVES.length;
-
-  return(
-    <div style={{paddingBottom:90}}>
-      <div style={{background:C.greenGrad,padding:"16px 16px 20px"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <BackBtn onClick={onBack}/>
-          <div style={{color:C.white,fontWeight:800,fontSize:17}}>⚙️ Admin: Upload Foto</div>
-        </div>
-      </div>
-      <div style={{padding:"12px 16px"}}>
-        <div style={{background:"#FFF3CD",border:"1.5px solid #FFC107",borderRadius:12,padding:"10px 14px",marginBottom:14,fontSize:12,color:"#856404"}}>
-          ⚠️ Panel development. Upload semua foto lalu kabari admin untuk menghapus panel ini.
-        </div>
-
-        {/* PRODUK */}
-        <div style={{fontWeight:800,fontSize:14,color:"#1a1a1a",marginBottom:10,marginTop:4}}>🛒 Produk Marketplace ({PRODS.length})</div>
-        {PRODS.map(p=>(
-          <ItemRow key={"p"+p.id} itemKey={"p"+p.id} name={p.name} em={p.em} cat={`ID:${p.id} · ${p.cat}`} defaultImg={p.img}/>
-        ))}
-
-        {/* LIVE SESSIONS */}
-        <div style={{fontWeight:800,fontSize:14,color:"#1a1a1a",marginBottom:10,marginTop:14}}>🔴 Live Sessions ({LIVES.length})</div>
-        {LIVES.map(ls=>(
-          <ItemRow key={"l"+ls.id} itemKey={"l"+ls.id} name={ls.seller} em={ls.em} cat={`Live · ${ls.product}`} defaultImg={ls.img}/>
-        ))}
-
-        <div style={{textAlign:"center",marginTop:14,fontSize:12,color:"#6B7280",background:"#F9FAFB",borderRadius:10,padding:"10px"}}>
-          ✅ {totalCustom}/{totalItems} item sudah punya foto custom
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const ProfilScreen=({onNav,onBack})=>{
   const [editMode,setEditMode]=useState(false);
@@ -1988,7 +1893,6 @@ const ProfilScreen=({onNav,onBack})=>{
     {icon:"🔒",l:"Keamanan Akun",a:()=>onNav("keamanan")},
     {icon:"❓",l:"Bantuan & FAQ",a:()=>onNav("bantuan")},
     {icon:"ℹ️",l:"Tentang TALARA",a:()=>onNav("tentang")},
-    {icon:"🛠️",l:"⚙️ Admin: Upload Foto Produk",a:()=>onNav("admin_photo")},
   ];
   return(
     <div style={{paddingBottom:90}}>
@@ -2181,7 +2085,6 @@ export default function TalaraApp(){
     else if(tab==="keamanan"){go("keamanan");}
     else if(tab==="bantuan"){go("bantuan");}
     else if(tab==="tentang"){go("tentang");}
-    else if(tab==="admin_photo"){go("admin_photo");}
   };
 
   const notifUnread=notifs.filter(n=>!n.read).length;
@@ -2251,7 +2154,6 @@ export default function TalaraApp(){
         {screen==="bantuan"&&<HelpScreen onBack={back}/>}
 
         {screen==="tentang"&&<AboutScreen onBack={back}/> }
-        {screen==="admin_photo"&&<AdminPhotoScreen onBack={back}/>}
 
         {screen==="profil"&&<ProfilScreen onNav={handleNav} onBack={back}/>}
 
