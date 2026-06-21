@@ -416,15 +416,15 @@ const WelcomeScreen=({onSelect})=>{
         <div style={{position:"absolute",bottom:-40,left:-40,width:140,height:140,borderRadius:"50%",background:"rgba(255,255,255,0.04)"}}/>
         <div style={{position:"absolute",top:"30%",left:-30,width:80,height:80,borderRadius:"50%",background:"rgba(255,215,0,0.07)"}}/>
 
-        {/* Logo resmi TALARA */}
+        {/* Logo resmi TALARA - ikon transparan */}
         <div style={{display:"flex",justifyContent:"center",marginBottom:16}}>
           <img
-            src="/talara-logo.png"
+            src="/talara-icon.png"
             alt="TALARA Logo"
             style={{
-              width:160,height:160,
+              width:150,height:150,
               objectFit:"contain",
-              filter:"drop-shadow(0 4px 24px rgba(0,0,0,0.35))",
+              filter:"drop-shadow(0 6px 20px rgba(0,0,0,0.5))",
             }}
           />
         </div>
