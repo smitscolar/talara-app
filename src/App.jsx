@@ -17,29 +17,29 @@ const fmt=n=>new Intl.NumberFormat("id-ID").format(n);
 const fmtTP=n=>`${fmt(n)} TP`;
 
 const PRODS=[
-  {id:1,name:"Gabah Organik Premium",seller:"Pak Slamet",sId:"s1",price:8000,tp:16,unit:"kg",stock:500,cat:"pertanian",em:"🌾",rating:4.8,sold:234,loc:"Klaten, Jawa Tengah",desc:"Gabah organik bebas pestisida, dibudidayakan dengan metode alami. Sudah tersertifikasi organik dari Dinas Pertanian Jawa Tengah. Hasil panen musim ini sangat baik.",reviews:[{u:"Bu Rina",s:5,c:"Berasnya pulen banget, sudah jadi langganan!"},{u:"Pak Dono",s:5,c:"Kualitas terjamin, pengiriman cepat."},{u:"Ibu Sari",s:4,c:"Bagus, harga juga wajar untuk organik."}]},
-  {id:2,name:"Cabai Merah Keriting",seller:"Bu Rosmini",sId:"s2",price:35000,tp:70,unit:"kg",stock:200,cat:"pertanian",em:"🌶️",rating:4.7,sold:189,loc:"Garut, Jawa Barat",desc:"Cabai merah keriting segar dipetik pagi hari langsung dari kebun. Tingkat kepedasan tinggi, cocok untuk masakan Padang dan sambal.",reviews:[{u:"Warung Padang",s:5,c:"Segar dan pedas, pelanggan suka!"},{u:"Ibu Dapur",s:4,c:"Kualitas konsisten, stok selalu ada."}]},
-  {id:3,name:"Kopi Arabica Gayo",seller:"Koperasi Gayo",sId:"s3",price:120000,tp:240,unit:"kg",stock:300,cat:"perkebunan",em:"☕",rating:5.0,sold:567,loc:"Aceh Tengah, Aceh",desc:"Kopi arabica single origin dari dataran tinggi Gayo 1200 mdpl. Proses natural, rasa fruity dengan aroma floral. Sudah diekspor ke Jepang, Eropa dan Amerika.",reviews:[{u:"Roaster Jakarta",s:5,c:"Konsisten, terbaik dari Gayo!"},{u:"Cafe Bali",s:5,c:"Pelanggan kami sangat suka kualitasnya."}]},
-  {id:4,name:"Udang Vaname Segar",seller:"Tambak Pak Budi",sId:"s4",price:85000,tp:170,unit:"kg",stock:500,cat:"nelayan",em:"🦐",rating:4.8,sold:678,loc:"Lampung Selatan",desc:"Udang vaname size 50, budidaya tambak intensif dengan pakan berkualitas. Segar, bersih, bebas antibiotik. Siap kirim dengan cold chain.",reviews:[{u:"Restoran Seafood",s:5,c:"Segar dan bersih, cocok untuk restoran premium."},{u:"Hotel Bintang 5",s:5,c:"Kualitas terjaga, pengiriman andal."}]},
-  {id:5,name:"Ikan Tuna Sirip Kuning",seller:"Nelayan Bitung",sId:"s5",price:65000,tp:130,unit:"kg",stock:100,cat:"nelayan",em:"🐟",rating:4.9,sold:345,loc:"Bitung, Sulawesi Utara",desc:"Tuna sirip kuning segar, tangkapan pagi hari dari Laut Maluku. Daging merah segar, cocok untuk sashimi grade dan steak tuna premium.",reviews:[{u:"Sushi Bar Jakarta",s:5,c:"Kualitas sashimi grade, luar biasa!"},{u:"Hotel Resort",s:5,c:"Selalu fresh dan berkualitas tinggi."}]},
-  {id:6,name:"Kakao Fermentasi",seller:"Bu Cici Farm",sId:"s6",price:45000,tp:90,unit:"kg",stock:800,cat:"perkebunan",em:"🍫",rating:4.9,sold:234,loc:"Kolaka, Sulawesi Tenggara",desc:"Biji kakao fermentasi 5 hari penuh dengan metode kotak kayu. Flavor profile fruity dan nutty. Diminati chocolate maker lokal dan internasional.",reviews:[{u:"Chocolatier",s:5,c:"Best Sulawesi cocoa I ever tasted!"},{u:"Eksportir Kakao",s:5,c:"Kualitas konsisten, siap ekspor."}]},
-  {id:7,name:"Traktor Mini 7HP",seller:"AgriMaju Store",sId:"s7",price:8500000,tp:17000,unit:"unit",stock:10,cat:"peralatan",em:"🚜",rating:4.8,sold:45,loc:"Malang, Jawa Timur",desc:"Traktor mini mesin diesel 7HP, cocok untuk sawah 0.5-2 hektar. Dilengkapi rotavator, mudah dioperasikan oleh satu orang. Garansi mesin 1 tahun.",reviews:[{u:"Petani Klaten",s:5,c:"Sangat membantu, hemat tenaga dan waktu!"},{u:"Kelompok Tani",s:4,c:"Performa bagus untuk sawah kecil hingga sedang."}]},
-  {id:8,name:"Rod Pancing Carbon 2.4m",seller:"Fishing Pro",sId:"s8",price:280000,tp:560,unit:"unit",stock:25,cat:"pancing",em:"🎣",rating:4.8,sold:89,loc:"Jakarta",desc:"Rod karbon T700, ringan dan kuat, panjang 2.4m. Cocok untuk mancing laut, sungai, dan danau. Ring SiC anti gesekan, bawa angler ke level berikutnya.",reviews:[{u:"Angler Pro",s:5,c:"Ringan, sensitif, sangat direkomendasikan!"},{u:"Pemancing Danau",s:5,c:"Kualitas bagus dengan harga terjangkau."}]},
-  {id:9,name:"Sawit TBS Segar",seller:"Pak Ridwan",sId:"s9",price:1800,tp:3.6,unit:"kg",stock:50000,cat:"perkebunan",em:"🌴",rating:4.5,sold:1200,loc:"Riau",desc:"Tandan Buah Segar kelapa sawit berkualitas tinggi. Kadar minyak optimal, siap olah ke PKS. Tersedia dalam jumlah besar untuk kebutuhan pabrik.",reviews:[{u:"PKS Riau",s:5,c:"Kualitas TBS konsisten, pasokan lancar."}]},
-  {id:10,name:"Kepiting Bakau Jumbo",seller:"Budidaya Pak Leman",sId:"s10",price:150000,tp:300,unit:"kg",stock:50,cat:"nelayan",em:"🦀",rating:5.0,sold:89,loc:"Kalimantan Selatan",desc:"Kepiting bakau jumbo 500g+, budidaya manggrove alami, berisi penuh. Populer di restoran seafood premium dan hotel bintang 5.",reviews:[{u:"Chef Hotel Mulia",s:5,c:"Kepiting terbaik, daging penuh dan manis!"},{u:"Restoran Seafood",s:5,c:"Pelanggan sangat puas, jadi menu andalan."}]},
+  {id:1,name:"Gabah Organik Premium",seller:"Pak Slamet",sId:"s1",price:8000,tp:16,unit:"kg",stock:500,cat:"pertanian",em:"🌾",img:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&q=80",rating:4.8,sold:234,loc:"Klaten, Jawa Tengah",desc:"Gabah organik bebas pestisida, dibudidayakan dengan metode alami. Sudah tersertifikasi organik dari Dinas Pertanian Jawa Tengah. Hasil panen musim ini sangat baik.",reviews:[{u:"Bu Rina",s:5,c:"Berasnya pulen banget, sudah jadi langganan!"},{u:"Pak Dono",s:5,c:"Kualitas terjamin, pengiriman cepat."},{u:"Ibu Sari",s:4,c:"Bagus, harga juga wajar untuk organik."}]},
+  {id:2,name:"Cabai Merah Keriting",seller:"Bu Rosmini",sId:"s2",price:35000,tp:70,unit:"kg",stock:200,cat:"pertanian",em:"🌶️",img:"https://images.unsplash.com/photo-1635700949892-22e2867cde88?w=400&q=80",rating:4.7,sold:189,loc:"Garut, Jawa Barat",desc:"Cabai merah keriting segar dipetik pagi hari langsung dari kebun. Tingkat kepedasan tinggi, cocok untuk masakan Padang dan sambal.",reviews:[{u:"Warung Padang",s:5,c:"Segar dan pedas, pelanggan suka!"},{u:"Ibu Dapur",s:4,c:"Kualitas konsisten, stok selalu ada."}]},
+  {id:3,name:"Kopi Arabica Gayo",seller:"Koperasi Gayo",sId:"s3",price:120000,tp:240,unit:"kg",stock:300,cat:"perkebunan",em:"☕",img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&q=80",rating:5.0,sold:567,loc:"Aceh Tengah, Aceh",desc:"Kopi arabica single origin dari dataran tinggi Gayo 1200 mdpl. Proses natural, rasa fruity dengan aroma floral. Sudah diekspor ke Jepang, Eropa dan Amerika.",reviews:[{u:"Roaster Jakarta",s:5,c:"Konsisten, terbaik dari Gayo!"},{u:"Cafe Bali",s:5,c:"Pelanggan kami sangat suka kualitasnya."}]},
+  {id:4,name:"Udang Vaname Segar",seller:"Tambak Pak Budi",sId:"s4",price:85000,tp:170,unit:"kg",stock:500,cat:"nelayan",em:"🦐",img:"https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=400&q=80",rating:4.8,sold:678,loc:"Lampung Selatan",desc:"Udang vaname size 50, budidaya tambak intensif dengan pakan berkualitas. Segar, bersih, bebas antibiotik. Siap kirim dengan cold chain.",reviews:[{u:"Restoran Seafood",s:5,c:"Segar dan bersih, cocok untuk restoran premium."},{u:"Hotel Bintang 5",s:5,c:"Kualitas terjaga, pengiriman andal."}]},
+  {id:5,name:"Ikan Tuna Sirip Kuning",seller:"Nelayan Bitung",sId:"s5",price:65000,tp:130,unit:"kg",stock:100,cat:"nelayan",em:"🐟",img:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&q=80",rating:4.9,sold:345,loc:"Bitung, Sulawesi Utara",desc:"Tuna sirip kuning segar, tangkapan pagi hari dari Laut Maluku. Daging merah segar, cocok untuk sashimi grade dan steak tuna premium.",reviews:[{u:"Sushi Bar Jakarta",s:5,c:"Kualitas sashimi grade, luar biasa!"},{u:"Hotel Resort",s:5,c:"Selalu fresh dan berkualitas tinggi."}]},
+  {id:6,name:"Kakao Fermentasi",seller:"Bu Cici Farm",sId:"s6",price:45000,tp:90,unit:"kg",stock:800,cat:"perkebunan",em:"🍫",img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80",rating:4.9,sold:234,loc:"Kolaka, Sulawesi Tenggara",desc:"Biji kakao fermentasi 5 hari penuh dengan metode kotak kayu. Flavor profile fruity dan nutty. Diminati chocolate maker lokal dan internasional.",reviews:[{u:"Chocolatier",s:5,c:"Best Sulawesi cocoa I ever tasted!"},{u:"Eksportir Kakao",s:5,c:"Kualitas konsisten, siap ekspor."}]},
+  {id:7,name:"Traktor Mini 7HP",seller:"AgriMaju Store",sId:"s7",price:8500000,tp:17000,unit:"unit",stock:10,cat:"peralatan",em:"🚜",img:"https://images.unsplash.com/photo-1530267981375-f0de937f5f13?w=400&q=80",rating:4.8,sold:45,loc:"Malang, Jawa Timur",desc:"Traktor mini mesin diesel 7HP, cocok untuk sawah 0.5-2 hektar. Dilengkapi rotavator, mudah dioperasikan oleh satu orang. Garansi mesin 1 tahun.",reviews:[{u:"Petani Klaten",s:5,c:"Sangat membantu, hemat tenaga dan waktu!"},{u:"Kelompok Tani",s:4,c:"Performa bagus untuk sawah kecil hingga sedang."}]},
+  {id:8,name:"Rod Pancing Carbon 2.4m",seller:"Fishing Pro",sId:"s8",price:280000,tp:560,unit:"unit",stock:25,cat:"pancing",em:"🎣",img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&q=80",rating:4.8,sold:89,loc:"Jakarta",desc:"Rod karbon T700, ringan dan kuat, panjang 2.4m. Cocok untuk mancing laut, sungai, dan danau. Ring SiC anti gesekan, bawa angler ke level berikutnya.",reviews:[{u:"Angler Pro",s:5,c:"Ringan, sensitif, sangat direkomendasikan!"},{u:"Pemancing Danau",s:5,c:"Kualitas bagus dengan harga terjangkau."}]},
+  {id:9,name:"Sawit TBS Segar",seller:"Pak Ridwan",sId:"s9",price:1800,tp:3.6,unit:"kg",stock:50000,cat:"perkebunan",em:"🌴",img:"https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=80",rating:4.5,sold:1200,loc:"Riau",desc:"Tandan Buah Segar kelapa sawit berkualitas tinggi. Kadar minyak optimal, siap olah ke PKS. Tersedia dalam jumlah besar untuk kebutuhan pabrik.",reviews:[{u:"PKS Riau",s:5,c:"Kualitas TBS konsisten, pasokan lancar."}]},
+  {id:10,name:"Kepiting Bakau Jumbo",seller:"Budidaya Pak Leman",sId:"s10",price:150000,tp:300,unit:"kg",stock:50,cat:"nelayan",em:"🦀",img:"https://images.unsplash.com/photo-1581299894007-aaa50297cf16?w=400&q=80",rating:5.0,sold:89,loc:"Kalimantan Selatan",desc:"Kepiting bakau jumbo 500g+, budidaya manggrove alami, berisi penuh. Populer di restoran seafood premium dan hotel bintang 5.",reviews:[{u:"Chef Hotel Mulia",s:5,c:"Kepiting terbaik, daging penuh dan manis!"},{u:"Restoran Seafood",s:5,c:"Pelanggan sangat puas, jadi menu andalan."}]},
 ];
 
 const SELLERS={
-  s1:{name:"Pak Slamet",loc:"Klaten, Jawa Tengah",rating:4.8,sold:1234,joined:"Jan 2024",cat:"Pertanian",prods:12,em:"👨‍🌾"},
-  s2:{name:"Bu Rosmini",loc:"Garut, Jawa Barat",rating:4.7,sold:890,joined:"Mar 2024",cat:"Pertanian",prods:8,em:"👩‍🌾"},
-  s3:{name:"Koperasi Gayo",loc:"Aceh Tengah",rating:5.0,sold:3400,joined:"Jun 2023",cat:"Perkebunan",prods:15,em:"☕"},
-  s4:{name:"Tambak Pak Budi",loc:"Lampung Selatan",rating:4.8,sold:2100,joined:"Feb 2024",cat:"Nelayan",prods:6,em:"🦐"},
-  s5:{name:"Nelayan Bitung",loc:"Bitung, Sulawesi Utara",rating:4.9,sold:1800,joined:"Apr 2023",cat:"Nelayan",prods:10,em:"🐟"},
-  s6:{name:"Bu Cici Farm",loc:"Kolaka, Sulawesi Tenggara",rating:4.9,sold:1100,joined:"Jul 2023",cat:"Perkebunan",prods:7,em:"🍫"},
-  s7:{name:"AgriMaju Store",loc:"Malang, Jawa Timur",rating:4.8,sold:456,joined:"Jan 2024",cat:"Peralatan",prods:30,em:"🚜"},
-  s8:{name:"Fishing Pro",loc:"Jakarta",rating:4.8,sold:789,joined:"Mar 2023",cat:"Pancing",prods:50,em:"🎣"},
-  s9:{name:"Pak Ridwan",loc:"Riau",rating:4.5,sold:5000,joined:"Nov 2022",cat:"Perkebunan",prods:4,em:"🌴"},
-  s10:{name:"Pak Leman",loc:"Banjarmasin, Kalsel",rating:5.0,sold:567,joined:"Sep 2023",cat:"Nelayan",prods:5,em:"🦀"},
+  s1:{name:"Pak Slamet",loc:"Klaten, Jawa Tengah",rating:4.8,sold:1234,joined:"Jan 2024",cat:"Pertanian",prods:12,em:"👨‍🌾",img:"https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&q=80"},
+  s2:{name:"Bu Rosmini",loc:"Garut, Jawa Barat",rating:4.7,sold:890,joined:"Mar 2024",cat:"Pertanian",prods:8,em:"👩‍🌾",img:"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&q=80"},
+  s3:{name:"Koperasi Gayo",loc:"Aceh Tengah",rating:5.0,sold:3400,joined:"Jun 2023",cat:"Perkebunan",prods:15,em:"☕",img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=150&q=80"},
+  s4:{name:"Tambak Pak Budi",loc:"Lampung Selatan",rating:4.8,sold:2100,joined:"Feb 2024",cat:"Nelayan",prods:6,em:"🦐",img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&q=80"},
+  s5:{name:"Nelayan Bitung",loc:"Bitung, Sulawesi Utara",rating:4.9,sold:1800,joined:"Apr 2023",cat:"Nelayan",prods:10,em:"🐟",img:"https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=150&q=80"},
+  s6:{name:"Bu Cici Farm",loc:"Kolaka, Sulawesi Tenggara",rating:4.9,sold:1100,joined:"Jul 2023",cat:"Perkebunan",prods:7,em:"🍫",img:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&q=80"},
+  s7:{name:"AgriMaju Store",loc:"Malang, Jawa Timur",rating:4.8,sold:456,joined:"Jan 2024",cat:"Peralatan",prods:30,em:"🚜",img:"https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&q=80"},
+  s8:{name:"Fishing Pro",loc:"Jakarta",rating:4.8,sold:789,joined:"Mar 2023",cat:"Pancing",prods:50,em:"🎣",img:"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&q=80"},
+  s9:{name:"Pak Ridwan",loc:"Riau",rating:4.5,sold:5000,joined:"Nov 2022",cat:"Perkebunan",prods:4,em:"🌴",img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&q=80"},
+  s10:{name:"Pak Leman",loc:"Banjarmasin, Kalsel",rating:5.0,sold:567,joined:"Sep 2023",cat:"Nelayan",prods:5,em:"🦀",img:"https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=150&q=80"},
 };
 
 const CATS=[
@@ -52,10 +52,10 @@ const CATS=[
 ];
 
 const LIVES=[
-  {id:1,seller:"Pak Slamet Live",sId:"s1",product:"Flash Sale Gabah Organik!",viewers:234,em:"🌾",price:7500,origPrice:8000},
-  {id:2,seller:"Nelayan Bitung Live",sId:"s5",product:"Lelang Tuna Segar Pagi",viewers:1203,em:"🐟",price:60000,origPrice:65000},
-  {id:3,seller:"Kopi Gayo Official",sId:"s3",product:"Kopi Premium Diskon 30%",viewers:567,em:"☕",price:84000,origPrice:120000},
-  {id:4,seller:"Fishing Pro Live",sId:"s8",product:"Demo Alat Pancing Baru",viewers:189,em:"🎣",price:250000,origPrice:280000},
+  {id:1,seller:"Pak Slamet Live",sId:"s1",product:"Flash Sale Gabah Organik!",viewers:234,em:"🌾",img:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&q=80",price:7500,origPrice:8000},
+  {id:2,seller:"Nelayan Bitung Live",sId:"s5",product:"Lelang Tuna Segar Pagi",viewers:1203,em:"🐟",img:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&q=80",price:60000,origPrice:65000},
+  {id:3,seller:"Kopi Gayo Official",sId:"s3",product:"Kopi Premium Diskon 30%",viewers:567,em:"☕",img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&q=80",price:84000,origPrice:120000},
+  {id:4,seller:"Fishing Pro Live",sId:"s8",product:"Demo Alat Pancing Baru",viewers:189,em:"🎣",img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&q=80",price:250000,origPrice:280000},
 ];
 
 const NOTIFS_D=[
@@ -304,13 +304,16 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount})=>{
         </div>
 
         {/* Promo Banner */}
-        <div style={{background:"linear-gradient(135deg,#1565A8,#2E9B3F)",borderRadius:16,padding:"14px 16px",marginTop:14,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <div>
-            <div style={{color:C.white,fontWeight:800,fontSize:14}}>🎉 Promo Ongkir Gratis!</div>
-            <div style={{color:"rgba(255,255,255,0.8)",fontSize:12,marginTop:3}}>Semua produk pertanian hari ini</div>
-            <div style={{marginTop:8}}><Badge color={C.gold}>Berlaku s/d 23:59</Badge></div>
+        <div style={{borderRadius:16,marginTop:14,overflow:"hidden",position:"relative",height:90,cursor:"pointer"}}>
+          <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&q=80" alt="promo" style={{width:"100%",height:"100%",objectFit:"cover",position:"absolute",inset:0}}/>
+          <div style={{position:"absolute",inset:0,background:"linear-gradient(90deg,rgba(21,101,168,0.92) 0%,rgba(46,155,63,0.85) 100%)",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"0 18px"}}>
+            <div>
+              <div style={{color:C.white,fontWeight:800,fontSize:14}}>🎉 Promo Ongkir Gratis!</div>
+              <div style={{color:"rgba(255,255,255,0.85)",fontSize:12,marginTop:3}}>Semua produk pertanian hari ini</div>
+              <div style={{marginTop:6}}><Badge color={C.gold}>Berlaku s/d 23:59</Badge></div>
+            </div>
+            <div style={{fontSize:44}}>🚚</div>
           </div>
-          <div style={{fontSize:50}}>🚚</div>
         </div>
 
         {/* Live */}
@@ -318,16 +321,16 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount})=>{
           <SH title="🔴 Live Sekarang" action="Lihat Semua" onAction={()=>onNav("live_list")}/>
           <div style={{display:"flex",gap:12,overflowX:"auto",paddingBottom:6}}>
             {LIVES.map(ls=>(
-              <div key={ls.id} onClick={()=>onLive(ls)} style={{flex:"0 0 138px",background:C.dark,borderRadius:16,overflow:"hidden",cursor:"pointer",height:188,position:"relative"}}>
-                <div style={{background:`linear-gradient(180deg,transparent 15%,${C.dark}ee)`,position:"absolute",inset:0,display:"flex",flexDirection:"column",justifyContent:"space-between",padding:10}}>
+              <div key={ls.id} onClick={()=>onLive(ls)} style={{flex:"0 0 138px",borderRadius:16,overflow:"hidden",cursor:"pointer",height:188,position:"relative"}}>
+                <img src={ls.img} alt={ls.product} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}/>
+                <div style={{background:`linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.75) 100%)`,position:"absolute",inset:0,display:"flex",flexDirection:"column",justifyContent:"space-between",padding:10}}>
                   <div style={{display:"flex",justifyContent:"space-between"}}>
                     <span style={{background:C.danger,color:C.white,fontSize:8,fontWeight:800,padding:"2px 7px",borderRadius:20}}>● LIVE</span>
                     <span style={{background:"rgba(0,0,0,0.5)",color:C.white,fontSize:9,padding:"2px 6px",borderRadius:20}}>👁{ls.viewers}</span>
                   </div>
-                  <div style={{fontSize:42,textAlign:"center"}}>{ls.em}</div>
                   <div>
                     <div style={{fontSize:11,fontWeight:700,color:C.white}}>{ls.seller}</div>
-                    <div style={{fontSize:9,color:"rgba(255,255,255,0.7)"}}>{ls.product}</div>
+                    <div style={{fontSize:9,color:"rgba(255,255,255,0.8)"}}>{ls.product}</div>
                     <div style={{fontSize:10,color:C.gold,fontWeight:700,marginTop:3}}>Rp {fmt(ls.price)}/{PRODS.find(p=>p.sId===ls.sId)?.unit||"kg"}</div>
                   </div>
                 </div>
@@ -359,8 +362,11 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount})=>{
           <SH title={`${cat==="semua"?"Produk Terbaru":CATS.find(c=>c.k===cat)?.l} (${filtered.length})`} action="Lihat Semua" onAction={()=>onNav("market")}/>
           <div style={{display:"flex",flexWrap:"wrap",gap:10}}>
             {filtered.map(p=>(
-              <div key={p.id} style={{flex:"0 0 calc(50% - 5px)",background:C.white,borderRadius:14,overflow:"hidden",boxShadow:"0 1px 8px rgba(0,0,0,0.07)",cursor:"pointer"}} onClick={()=>onProduct(p)}>
-                <div style={{background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:88,display:"flex",alignItems:"center",justifyContent:"center",fontSize:44}}>{p.em}</div>
+              <div key={p.id} style={{flex:"0 0 calc(50% - 5px)",background:C.white,borderRadius:14,overflow:"hidden",boxShadow:"0 2px 12px rgba(0,0,0,0.09)",cursor:"pointer"}} onClick={()=>onProduct(p)}>
+                <div style={{height:110,overflow:"hidden",position:"relative"}}>
+                  <img src={p.img} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+                  <div style={{display:"none",background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:"100%",alignItems:"center",justifyContent:"center",fontSize:44,position:"absolute",inset:0}}>{p.em}</div>
+                </div>
                 <div style={{padding:"10px 10px 12px"}}>
                   <div style={{fontSize:12,fontWeight:700,color:C.dark,lineHeight:1.3,marginBottom:3}}>{p.name}</div>
                   <div style={{fontSize:10,color:C.grayMid,marginBottom:4}}>📍{p.loc.split(",")[0]}</div>
@@ -408,8 +414,11 @@ const MarketScreen=({onProduct,onAddCart,onBack})=>{
         <div style={{fontSize:12,color:C.grayMid,marginBottom:10}}>{filtered.length} produk ditemukan</div>
         <div style={{display:"flex",flexWrap:"wrap",gap:10}}>
           {filtered.map(p=>(
-            <div key={p.id} style={{flex:"0 0 calc(50% - 5px)",background:C.white,borderRadius:14,overflow:"hidden",boxShadow:"0 1px 8px rgba(0,0,0,0.07)",cursor:"pointer"}} onClick={()=>onProduct(p)}>
-              <div style={{background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:88,display:"flex",alignItems:"center",justifyContent:"center",fontSize:44}}>{p.em}</div>
+            <div key={p.id} style={{flex:"0 0 calc(50% - 5px)",background:C.white,borderRadius:14,overflow:"hidden",boxShadow:"0 2px 12px rgba(0,0,0,0.09)",cursor:"pointer"}} onClick={()=>onProduct(p)}>
+              <div style={{height:110,overflow:"hidden",position:"relative"}}>
+                <img src={p.img} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+                <div style={{display:"none",background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:"100%",alignItems:"center",justifyContent:"center",fontSize:44,position:"absolute",inset:0}}>{p.em}</div>
+              </div>
               <div style={{padding:"10px 10px 12px"}}>
                 <div style={{fontSize:12,fontWeight:700,color:C.dark,lineHeight:1.3,marginBottom:3}}>{p.name}</div>
                 <div style={{fontSize:10,color:C.grayMid,marginBottom:4}}>📍{p.loc.split(",")[0]}</div>
@@ -439,7 +448,10 @@ const ProductDetail=({product,onBack,onAddCart,onBuy,onStartChat})=>{
   return(
     <div style={{paddingBottom:100}}>
       <div style={{position:"relative"}}>
-        <div style={{background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:210,display:"flex",alignItems:"center",justifyContent:"center",fontSize:96}}>{product.em}</div>
+        <div style={{height:210,overflow:"hidden",position:"relative"}}>
+          <img src={product.img} alt={product.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+          <div style={{display:"none",background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:"100%",alignItems:"center",justifyContent:"center",fontSize:96,position:"absolute",inset:0}}>{product.em}</div>
+        </div>
         <button onClick={onBack} style={{position:"absolute",top:14,left:14,background:C.white,border:"none",borderRadius:20,width:36,height:36,fontSize:18,cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.15)",display:"flex",alignItems:"center",justifyContent:"center"}}>←</button>
       </div>
       <div style={{padding:16}}>
@@ -453,7 +465,9 @@ const ProductDetail=({product,onBack,onAddCart,onBuy,onStartChat})=>{
         <Card style={{marginTop:14}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
             <div style={{display:"flex",gap:10,alignItems:"center"}}>
-              <div style={{width:44,height:44,background:C.greenPale,borderRadius:22,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{seller.em}</div>
+              <div style={{width:44,height:44,borderRadius:22,overflow:"hidden",flexShrink:0}}>
+                <img src={seller.img} alt={seller.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.parentNode.style.background=C.greenPale;e.target.parentNode.style.display="flex";e.target.parentNode.style.alignItems="center";e.target.parentNode.style.justifyContent="center";e.target.parentNode.innerHTML=seller.em;}}/>
+              </div>
               <div>
                 <div style={{fontWeight:700,fontSize:13}}>{seller.name}</div>
                 <div style={{fontSize:11,color:C.grayMid}}>📍{seller.loc}</div>
@@ -558,7 +572,9 @@ const CartScreen=({cart,onBack,onRemove,onCheckout})=>{
             {cart.map((item,i)=>(
               <Card key={i} style={{marginBottom:10}}>
                 <div style={{display:"flex",gap:12,alignItems:"center"}}>
-                  <div style={{fontSize:40,background:C.greenPale,borderRadius:12,width:54,height:54,display:"flex",alignItems:"center",justifyContent:"center"}}>{item.em}</div>
+                  <div style={{width:54,height:54,borderRadius:12,overflow:"hidden",flexShrink:0}}>
+                    <img src={item.img} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.parentNode.style.background=C.greenPale;e.target.parentNode.style.display="flex";e.target.parentNode.style.alignItems="center";e.target.parentNode.style.justifyContent="center";e.target.parentNode.innerHTML=`<span style='font-size:28px'>${item.em}</span>`;}}/>
+                  </div>
                   <div style={{flex:1}}>
                     <div style={{fontWeight:700,fontSize:13}}>{item.name}</div>
                     <div style={{fontSize:11,color:C.grayMid}}>Qty: {item.qty} {item.unit}</div>
@@ -1151,7 +1167,11 @@ const OrdersScreen=({onBack})=>{
               <StatusB status={o.status}/>
             </div>
             <div style={{display:"flex",gap:10,alignItems:"center"}}>
-              <div style={{fontSize:36}}>{o.em}</div>
+              <div style={{width:48,height:48,borderRadius:10,overflow:"hidden",flexShrink:0,background:C.greenPale,display:"flex",alignItems:"center",justifyContent:"center",fontSize:26}}>
+                {PRODS.find(p=>p.em===o.em)?.img
+                  ?<img src={PRODS.find(p=>p.em===o.em)?.img} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                  :<span>{o.em}</span>}
+              </div>
               <div style={{flex:1}}>
                 <div style={{fontWeight:700,fontSize:13}}>{o.product}</div>
                 <div style={{fontSize:11,color:C.grayMid}}>{o.seller} · {o.date}</div>
