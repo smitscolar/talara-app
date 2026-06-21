@@ -210,9 +210,10 @@ const C = {
 const fmt=n=>new Intl.NumberFormat("id-ID").format(n);
 const fmtTP=n=>`${fmt(n)} TP`;
 
-// Ambil foto produk: prioritaskan foto custom dari localStorage
-const getProdImg=(prodId,defaultImg)=>{
-  try{const s=JSON.parse(localStorage.getItem("talara_prod_photos")||"{}");return s[prodId]||defaultImg;}
+// Ambil foto: prioritaskan foto custom dari localStorage
+// prefix: "p" untuk produk, "l" untuk live session
+const getProdImg=(prodId,defaultImg,prefix="p")=>{
+  try{const s=JSON.parse(localStorage.getItem("talara_prod_photos")||"{}");return s[prefix+prodId]||defaultImg;}
   catch{return defaultImg;}
 };
 
@@ -528,7 +529,7 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount,onLang}
           <div style={{display:"flex",gap:12,overflowX:"auto",paddingBottom:6}}>
             {LIVES.map(ls=>(
               <div key={ls.id} onClick={()=>onLive(ls)} style={{flex:"0 0 138px",borderRadius:16,overflow:"hidden",cursor:"pointer",height:188,position:"relative"}}>
-                <img src={getProdImg(ls.id,ls.img)} alt={ls.product} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}/>
+                <img src={getProdImg(ls.id,ls.img,"l")} alt={ls.product} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}/>
                 <div style={{background:`linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.75) 100%)`,position:"absolute",inset:0,display:"flex",flexDirection:"column",justifyContent:"space-between",padding:10}}>
                   <div style={{display:"flex",justifyContent:"space-between"}}>
                     <span style={{background:C.danger,color:C.white,fontSize:8,fontWeight:800,padding:"2px 7px",borderRadius:20}}>● LIVE</span>
@@ -570,7 +571,7 @@ const HomeScreen=({onNav,cartCount,onProduct,onAddCart,onLive,notifCount,onLang}
             {filtered.map(p=>(
               <div key={p.id} style={{flex:"0 0 calc(50% - 5px)",background:C.white,borderRadius:14,overflow:"hidden",boxShadow:"0 2px 12px rgba(0,0,0,0.09)",cursor:"pointer"}} onClick={()=>onProduct(p)}>
                 <div style={{height:110,overflow:"hidden",position:"relative"}}>
-                  <img src={getProdImg(p.id,p.img)} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+                  <img src={getProdImg(p.id,p.img,"p")} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
                   <div style={{display:"none",background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:"100%",alignItems:"center",justifyContent:"center",fontSize:44,position:"absolute",inset:0}}>{p.em}</div>
                 </div>
                 <div style={{padding:"10px 10px 12px"}}>
@@ -622,7 +623,7 @@ const MarketScreen=({onProduct,onAddCart,onBack})=>{
           {filtered.map(p=>(
             <div key={p.id} style={{flex:"0 0 calc(50% - 5px)",background:C.white,borderRadius:14,overflow:"hidden",boxShadow:"0 2px 12px rgba(0,0,0,0.09)",cursor:"pointer"}} onClick={()=>onProduct(p)}>
               <div style={{height:110,overflow:"hidden",position:"relative"}}>
-                <img src={getProdImg(p.id,p.img)} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+                <img src={getProdImg(p.id,p.img,"p")} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
                 <div style={{display:"none",background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:"100%",alignItems:"center",justifyContent:"center",fontSize:44,position:"absolute",inset:0}}>{p.em}</div>
               </div>
               <div style={{padding:"10px 10px 12px"}}>
@@ -655,7 +656,7 @@ const ProductDetail=({product,onBack,onAddCart,onBuy,onStartChat})=>{
     <div style={{paddingBottom:100}}>
       <div style={{position:"relative"}}>
         <div style={{height:210,overflow:"hidden",position:"relative"}}>
-          <img src={getProdImg(product.id,product.img)} alt={product.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+          <img src={getProdImg(product.id,product.img,"p")} alt={product.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
           <div style={{display:"none",background:`linear-gradient(135deg,${C.greenPale},${C.bluePale})`,height:"100%",alignItems:"center",justifyContent:"center",fontSize:96,position:"absolute",inset:0}}>{product.em}</div>
         </div>
         <button onClick={onBack} style={{position:"absolute",top:14,left:14,background:C.white,border:"none",borderRadius:20,width:36,height:36,fontSize:18,cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.15)",display:"flex",alignItems:"center",justifyContent:"center"}}>←</button>
@@ -779,7 +780,7 @@ const CartScreen=({cart,onBack,onRemove,onCheckout})=>{
               <Card key={i} style={{marginBottom:10}}>
                 <div style={{display:"flex",gap:12,alignItems:"center"}}>
                   <div style={{width:54,height:54,borderRadius:12,overflow:"hidden",flexShrink:0}}>
-                    <img src={getProdImg(item.id,item.img)} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.parentNode.style.background=C.greenPale;e.target.parentNode.style.display="flex";e.target.parentNode.style.alignItems="center";e.target.parentNode.style.justifyContent="center";e.target.parentNode.innerHTML=`<span style='font-size:28px'>${item.em}</span>`;}}/>
+                    <img src={getProdImg(item.id,item.img,"p")} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";e.target.parentNode.style.background=C.greenPale;e.target.parentNode.style.display="flex";e.target.parentNode.style.alignItems="center";e.target.parentNode.style.justifyContent="center";e.target.parentNode.innerHTML=`<span style='font-size:28px'>${item.em}</span>`;}}/>
                   </div>
                   <div style={{flex:1}}>
                     <div style={{fontWeight:700,fontSize:13}}>{item.name}</div>
@@ -1887,14 +1888,14 @@ const AdminPhotoScreen=({onBack})=>{
   const [photos,setPhotos]=useState(getStoredPhotos);
   const [saving,setSaving]=useState(null);
 
-  const handleFile=(prodId,e)=>{
+  const handleFile=(key,e)=>{
     const file=e.target.files[0];
     if(!file)return;
     if(file.size>5*1024*1024){alert("Foto max 5MB!");return;}
-    setSaving(prodId);
+    setSaving(key);
     const reader=new FileReader();
     reader.onload=ev=>{
-      const updated={...photos,[prodId]:ev.target.result};
+      const updated={...photos,[key]:ev.target.result};
       setPhotos(updated);
       saveStoredPhotos(updated);
       setSaving(null);
@@ -1902,12 +1903,42 @@ const AdminPhotoScreen=({onBack})=>{
     reader.readAsDataURL(file);
   };
 
-  const hapusFoto=(prodId)=>{
+  const hapusFoto=(key)=>{
     const updated={...photos};
-    delete updated[prodId];
+    delete updated[key];
     setPhotos(updated);
     saveStoredPhotos(updated);
   };
+
+  const ItemRow=({itemKey,name,em,cat,defaultImg})=>{
+    const hasCustom=!!photos[itemKey];
+    return(
+      <div style={{background:"#fff",borderRadius:14,padding:"12px 14px",marginBottom:10,boxShadow:"0 2px 10px rgba(0,0,0,0.07)",border:`1.5px solid ${hasCustom?"#1B6B2F":"#E5E7EB"}`}}>
+        <div style={{display:"flex",gap:12,alignItems:"center"}}>
+          <div style={{width:70,height:70,borderRadius:10,overflow:"hidden",background:"#F3F4F6",flexShrink:0,position:"relative"}}>
+            <img src={hasCustom?photos[itemKey]:defaultImg} alt={name} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none";}}/>
+            <div style={{position:"absolute",bottom:0,left:0,right:0,background:hasCustom?"rgba(27,107,47,0.85)":"rgba(0,0,0,0.5)",fontSize:8,color:"#fff",textAlign:"center",padding:"2px"}}>{hasCustom?"✅ custom":"default"}</div>
+          </div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontWeight:700,fontSize:13,color:"#1a1a1a",marginBottom:2}}>{em} {name}</div>
+            <div style={{fontSize:11,color:"#6B7280",marginBottom:8}}>{cat}</div>
+            <div style={{display:"flex",gap:6}}>
+              <label style={{flex:1,background:hasCustom?"#E8F5E9":"#1B6B2F",color:hasCustom?"#1B6B2F":"#fff",border:"1.5px solid #1B6B2F",borderRadius:8,padding:"6px 0",fontSize:11,fontWeight:700,textAlign:"center",cursor:"pointer",display:"block"}}>
+                {saving===itemKey?"⏳ Menyimpan...":(hasCustom?"🔄 Ganti":"📷 Upload")}
+                <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>handleFile(itemKey,e)} disabled={saving===itemKey}/>
+              </label>
+              {hasCustom&&(
+                <button onClick={()=>hapusFoto(itemKey)} style={{background:"#FEE2E2",color:"#DC2626",border:"1.5px solid #DC2626",borderRadius:8,padding:"6px 10px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🗑️</button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const totalCustom=Object.keys(photos).length;
+  const totalItems=PRODS.length+LIVES.length;
 
   return(
     <div style={{paddingBottom:90}}>
@@ -1919,45 +1950,23 @@ const AdminPhotoScreen=({onBack})=>{
       </div>
       <div style={{padding:"12px 16px"}}>
         <div style={{background:"#FFF3CD",border:"1.5px solid #FFC107",borderRadius:12,padding:"10px 14px",marginBottom:14,fontSize:12,color:"#856404"}}>
-          ⚠️ Panel ini hanya untuk keperluan development. Upload semua foto produk, lalu kabari admin untuk menghapus panel ini.
+          ⚠️ Panel development. Upload semua foto lalu kabari admin untuk menghapus panel ini.
         </div>
-        {PRODS.map(p=>{
-          const hasCustom=!!photos[p.id];
-          return(
-            <div key={p.id} style={{background:"#fff",borderRadius:14,padding:"12px 14px",marginBottom:10,boxShadow:"0 2px 10px rgba(0,0,0,0.07)",border:`1.5px solid ${hasCustom?"#1B6B2F":"#E5E7EB"}`}}>
-              <div style={{display:"flex",gap:12,alignItems:"center"}}>
-                {/* Preview foto */}
-                <div style={{width:70,height:70,borderRadius:10,overflow:"hidden",background:"#F3F4F6",flexShrink:0,position:"relative"}}>
-                  <img
-                    src={hasCustom?photos[p.id]:p.img}
-                    alt={p.name}
-                    style={{width:"100%",height:"100%",objectFit:"cover"}}
-                    onError={e=>{e.target.style.display="none";}}
-                  />
-                  {!hasCustom&&<div style={{position:"absolute",bottom:0,left:0,right:0,background:"rgba(0,0,0,0.5)",fontSize:8,color:"#fff",textAlign:"center",padding:"2px"}}>default</div>}
-                  {hasCustom&&<div style={{position:"absolute",bottom:0,left:0,right:0,background:"rgba(27,107,47,0.8)",fontSize:8,color:"#fff",textAlign:"center",padding:"2px"}}>✅ custom</div>}
-                </div>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontWeight:700,fontSize:13,color:"#1a1a1a",marginBottom:2}}>{p.em} {p.name}</div>
-                  <div style={{fontSize:11,color:"#6B7280",marginBottom:8}}>ID: {p.id} · {p.cat}</div>
-                  <div style={{display:"flex",gap:6}}>
-                    <label style={{flex:1,background:hasCustom?"#E8F5E9":"#1B6B2F",color:hasCustom?"#1B6B2F":"#fff",border:`1.5px solid #1B6B2F`,borderRadius:8,padding:"6px 0",fontSize:11,fontWeight:700,textAlign:"center",cursor:"pointer",display:"block"}}>
-                      {saving===p.id?"⏳ Menyimpan...":(hasCustom?"🔄 Ganti Foto":"📷 Upload Foto")}
-                      <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>handleFile(p.id,e)} disabled={saving===p.id}/>
-                    </label>
-                    {hasCustom&&(
-                      <button onClick={()=>hapusFoto(p.id)} style={{background:"#FEE2E2",color:"#DC2626",border:"1.5px solid #DC2626",borderRadius:8,padding:"6px 10px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
-                        🗑️ Hapus
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-        <div style={{textAlign:"center",marginTop:10,fontSize:11,color:"#6B7280"}}>
-          {Object.keys(photos).length}/{PRODS.length} produk sudah punya foto custom
+
+        {/* PRODUK */}
+        <div style={{fontWeight:800,fontSize:14,color:"#1a1a1a",marginBottom:10,marginTop:4}}>🛒 Produk Marketplace ({PRODS.length})</div>
+        {PRODS.map(p=>(
+          <ItemRow key={"p"+p.id} itemKey={"p"+p.id} name={p.name} em={p.em} cat={`ID:${p.id} · ${p.cat}`} defaultImg={p.img}/>
+        ))}
+
+        {/* LIVE SESSIONS */}
+        <div style={{fontWeight:800,fontSize:14,color:"#1a1a1a",marginBottom:10,marginTop:14}}>🔴 Live Sessions ({LIVES.length})</div>
+        {LIVES.map(ls=>(
+          <ItemRow key={"l"+ls.id} itemKey={"l"+ls.id} name={ls.seller} em={ls.em} cat={`Live · ${ls.product}`} defaultImg={ls.img}/>
+        ))}
+
+        <div style={{textAlign:"center",marginTop:14,fontSize:12,color:"#6B7280",background:"#F9FAFB",borderRadius:10,padding:"10px"}}>
+          ✅ {totalCustom}/{totalItems} item sudah punya foto custom
         </div>
       </div>
     </div>
