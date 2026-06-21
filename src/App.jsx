@@ -1911,7 +1911,12 @@ const AdminPhotoScreen=({onBack})=>{
 
   return(
     <div style={{paddingBottom:90}}>
-      <TopBar title="⚙️ Admin: Upload Foto Produk" onBack={onBack}/>
+      <div style={{background:C.greenGrad,padding:"16px 16px 20px"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <BackBtn onClick={onBack}/>
+          <div style={{color:C.white,fontWeight:800,fontSize:17}}>⚙️ Admin: Upload Foto</div>
+        </div>
+      </div>
       <div style={{padding:"12px 16px"}}>
         <div style={{background:"#FFF3CD",border:"1.5px solid #FFC107",borderRadius:12,padding:"10px 14px",marginBottom:14,fontSize:12,color:"#856404"}}>
           ⚠️ Panel ini hanya untuk keperluan development. Upload semua foto produk, lalu kabari admin untuk menghapus panel ini.
