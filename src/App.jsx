@@ -212,8 +212,11 @@ const fmtTP=n=>`${fmt(n)} TP`;
 
 // Ambil foto: prioritaskan foto custom dari localStorage
 // prefix: "p" untuk produk, "l" untuk live session
-// Foto produk langsung dari source - tidak perlu localStorage override
-const getProdImg=(prodId,defaultImg,prefix="p")=>defaultImg;
+// Foto produk: prioritas localStorage (custom) → fallback default
+const getProdImg=(prodId,defaultImg,prefix="p")=>{
+  try{const s=JSON.parse(localStorage.getItem("talara_prod_photos_v2")||"{}");return s[prefix+prodId]||defaultImg;}
+  catch{return defaultImg;}
+};
 
 const PRODS=[
   {id:1,name:"Gabah Organik Premium",seller:"Pak Slamet",sId:"s1",price:8000,tp:16,unit:"kg",stock:500,cat:"pertanian",em:"🌾",img:"https://images.unsplash.com/photo-1536054878-7cb3e50b6626?w=400&q=80",rating:4.8,sold:234,loc:"Klaten, Jawa Tengah",desc:"Gabah organik bebas pestisida, dibudidayakan dengan metode alami. Sudah tersertifikasi organik dari Dinas Pertanian Jawa Tengah. Hasil panen musim ini sangat baik.",reviews:[{u:"Bu Rina",s:5,c:"Berasnya pulen banget, sudah jadi langganan!"},{u:"Pak Dono",s:5,c:"Kualitas terjamin, pengiriman cepat."},{u:"Ibu Sari",s:4,c:"Bagus, harga juga wajar untuk organik."}]},
@@ -2166,6 +2169,142 @@ const AboutScreen=({onBack})=>(
 // ═══════════════════════════════════════════════
 // PROFIL
 // ═══════════════════════════════════════════════
+// ADMIN PHOTO MANAGER
+// ═══════════════════════════════════════════════
+const PHOTO_KEY="talara_prod_photos_v2";
+const loadPhotos=()=>{try{return JSON.parse(localStorage.getItem(PHOTO_KEY)||"{}");}catch{return {};}};
+const savePhotos=(obj)=>localStorage.setItem(PHOTO_KEY,JSON.stringify(obj));
+
+const AdminPhotoScreen=({onBack})=>{
+  const [photos,setPhotos]=useState(loadPhotos);
+  const [saving,setSaving]=useState(null);
+  const [tab,setTab]=useState("produk");
+
+  const handleFile=(key,e)=>{
+    const file=e.target.files[0];
+    if(!file)return;
+    if(file.size>8*1024*1024){alert("Foto max 8MB!");return;}
+    setSaving(key);
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const updated={...photos,[key]:ev.target.result};
+      setPhotos(updated);
+      savePhotos(updated);
+      setSaving(null);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const hapus=(key)=>{
+    const updated={...photos};
+    delete updated[key];
+    setPhotos(updated);
+    savePhotos(updated);
+  };
+
+  const ItemCard=({k,name,em,sub,defaultImg})=>{
+    const has=!!photos[k];
+    return(
+      <div style={{background:"#fff",borderRadius:14,padding:"10px 12px",marginBottom:10,
+        border:`1.5px solid ${has?"#1B6B2F":"#E5E7EB"}`,
+        boxShadow:has?"0 2px 12px rgba(27,107,47,0.12)":"0 1px 4px rgba(0,0,0,0.06)"}}>
+        <div style={{display:"flex",gap:10,alignItems:"center"}}>
+          <div style={{width:66,height:66,borderRadius:10,overflow:"hidden",flexShrink:0,position:"relative",background:"#F3F4F6"}}>
+            <img src={has?photos[k]:defaultImg} alt={name}
+              style={{width:"100%",height:"100%",objectFit:"cover"}}
+              onError={e=>{e.target.style.display="none";}}/>
+            <div style={{position:"absolute",bottom:0,left:0,right:0,
+              background:has?"rgba(27,107,47,0.85)":"rgba(0,0,0,0.45)",
+              fontSize:8,color:"#fff",textAlign:"center",padding:"2px 0"}}>
+              {has?"✅ custom":"default"}
+            </div>
+          </div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontWeight:700,fontSize:12,color:"#111",marginBottom:1}}>{em} {name}</div>
+            <div style={{fontSize:10,color:"#888",marginBottom:7}}>{sub}</div>
+            <div style={{display:"flex",gap:6}}>
+              <label style={{
+                flex:1,background:has?"#E8F5E9":"#1B6B2F",
+                color:has?"#1B6B2F":"#fff",
+                border:"1.5px solid #1B6B2F",borderRadius:8,
+                padding:"5px 0",fontSize:11,fontWeight:700,
+                textAlign:"center",cursor:"pointer",display:"block"}}>
+                {saving===k?"⏳...":(has?"🔄 Ganti":"📷 Upload")}
+                <input type="file" accept="image/*" style={{display:"none"}}
+                  onChange={e=>handleFile(k,e)} disabled={saving===k}/>
+              </label>
+              {has&&<button onClick={()=>hapus(k)}
+                style={{background:"#FEE2E2",color:"#DC2626",border:"1.5px solid #DC2626",
+                  borderRadius:8,padding:"5px 10px",fontSize:11,fontWeight:700,
+                  cursor:"pointer",fontFamily:"inherit"}}>🗑️</button>}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const totalP=PRODS.filter(p=>photos["p"+p.id]).length;
+  const totalL=LIVES.filter(l=>photos["l"+l.id]).length;
+
+  return(
+    <div style={{paddingBottom:90,background:"#F8F9FA",minHeight:"100vh"}}>
+      <div style={{background:C.greenGrad,padding:"16px 16px 20px"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <BackBtn onClick={onBack}/>
+          <div style={{color:C.white,fontWeight:800,fontSize:17}}>⚙️ Admin: Upload Foto</div>
+        </div>
+      </div>
+
+      {/* Warning */}
+      <div style={{margin:"12px 14px 0",background:"#FFF3CD",border:"1.5px solid #FFC107",
+        borderRadius:12,padding:"10px 14px",fontSize:12,color:"#856404"}}>
+        ⚠️ Foto tersimpan di browser ini. Setelah upload semua foto yang benar, foto akan permanen di browser ini.
+      </div>
+
+      {/* Progress */}
+      <div style={{margin:"10px 14px",background:"#fff",borderRadius:12,padding:"10px 14px",
+        display:"flex",justifyContent:"space-around",textAlign:"center",
+        boxShadow:"0 1px 6px rgba(0,0,0,0.06)"}}>
+        <div>
+          <div style={{fontSize:18,fontWeight:900,color:"#1B6B2F"}}>{totalP}/{PRODS.length}</div>
+          <div style={{fontSize:10,color:"#888"}}>Produk</div>
+        </div>
+        <div style={{width:1,background:"#E5E7EB"}}/>
+        <div>
+          <div style={{fontSize:18,fontWeight:900,color:"#1B6B2F"}}>{totalL}/{LIVES.length}</div>
+          <div style={{fontSize:10,color:"#888"}}>Live Session</div>
+        </div>
+        <div style={{width:1,background:"#E5E7EB"}}/>
+        <div>
+          <div style={{fontSize:18,fontWeight:900,color:totalP+totalL===PRODS.length+LIVES.length?"#1B6B2F":"#F57F17"}}>{totalP+totalL}/{PRODS.length+LIVES.length}</div>
+          <div style={{fontSize:10,color:"#888"}}>Total</div>
+        </div>
+      </div>
+
+      {/* Tab */}
+      <div style={{display:"flex",margin:"0 14px 10px",background:"#fff",borderRadius:10,padding:3,
+        boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+        {[["produk","🛒 Produk ("+PRODS.length+")"],["live","🔴 Live ("+LIVES.length+")"]].map(([k,l])=>(
+          <div key={k} onClick={()=>setTab(k)}
+            style={{flex:1,textAlign:"center",padding:"8px 4px",borderRadius:8,
+              background:tab===k?"#1B6B2F":"transparent",
+              color:tab===k?"#fff":"#666",fontWeight:700,fontSize:12,cursor:"pointer",transition:"all 0.2s"}}>
+            {l}
+          </div>
+        ))}
+      </div>
+
+      {/* List */}
+      <div style={{padding:"0 14px"}}>
+        {tab==="produk"
+          ?PRODS.map(p=><ItemCard key={p.id} k={"p"+p.id} name={p.name} em={p.em} sub={`ID:${p.id} · ${p.cat}`} defaultImg={p.img}/>)
+          :LIVES.map(l=><ItemCard key={l.id} k={"l"+l.id} name={l.seller} em={l.em} sub={`Live · ${l.product}`} defaultImg={l.img}/>)
+        }
+      </div>
+    </div>
+  );
+};
 
 const ProfilScreen=({onNav,onBack})=>{
   const [editMode,setEditMode]=useState(false);
@@ -2182,6 +2321,7 @@ const ProfilScreen=({onNav,onBack})=>{
     {icon:"🔒",l:"Keamanan Akun",a:()=>onNav("keamanan")},
     {icon:"❓",l:"Bantuan & FAQ",a:()=>onNav("bantuan")},
     {icon:"ℹ️",l:"Tentang TALARA",a:()=>onNav("tentang")},
+    {icon:"🛠️",l:"⚙️ Admin: Upload Foto",a:()=>onNav("admin_photo")},
   ];
   return(
     <div style={{paddingBottom:90}}>
@@ -2375,6 +2515,7 @@ export default function TalaraApp(){
     else if(tab==="keamanan"){go("keamanan");}
     else if(tab==="bantuan"){go("bantuan");}
     else if(tab==="tentang"){go("tentang");}
+    else if(tab==="admin_photo"){go("admin_photo");}
   };
 
   const notifUnread=notifs.filter(n=>!n.read).length;
@@ -2450,6 +2591,7 @@ export default function TalaraApp(){
         {screen==="bantuan"&&<HelpScreen onBack={back}/>}
 
         {screen==="tentang"&&<AboutScreen onBack={back}/> }
+        {screen==="admin_photo"&&<AdminPhotoScreen onBack={back}/>}
 
         {screen==="profil"&&<ProfilScreen onNav={handleNav} onBack={back}/>}
 
