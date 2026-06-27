@@ -1036,7 +1036,7 @@ const ProductDetail=({product,onBack,onAddCart,onBuy,onStartChat})=>{
           </div>
         </Card>
       </div>
-      <div style={{position:"fixed",bottom:0,left:0,right:0,padding:"10px 16px",background:C.white,boxShadow:"0 -2px 12px rgba(0,0,0,0.1)",display:"flex",gap:10,maxWidth:480,margin:"0 auto",boxSizing:"border-box"}}>
+      <div style={{position:"fixed",bottom:65,left:0,right:0,padding:"10px 16px",background:C.white,boxShadow:"0 -2px 12px rgba(0,0,0,0.1)",display:"flex",gap:10,maxWidth:480,margin:"0 auto",boxSizing:"border-box",zIndex:101}}>
         <Btn v="outline" onClick={()=>onAddCart(product,qty)} style={{flex:1}}>🛒 Keranjang</Btn>
         <Btn v="primary" onClick={()=>onBuy(product,qty)} style={{flex:1}}>⚡ Beli Sekarang</Btn>
       </div>
@@ -1052,7 +1052,7 @@ const CartScreen=({cart,onBack,onRemove,onCheckout})=>{
   const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
   const totalTP=cart.reduce((s,i)=>s+i.tp*i.qty,0);
   return(
-    <div style={{paddingBottom:100}}>
+    <div style={{paddingBottom:180}}>
       <div style={{padding:"16px 16px 0",display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
         <button onClick={onBack} style={{background:"none",border:"none",fontSize:22,cursor:"pointer"}}>←</button>
         <div style={{fontSize:17,fontWeight:800,color:C.dark}}>🛒 Keranjang ({cart.length})</div>
@@ -1110,7 +1110,7 @@ const CartScreen=({cart,onBack,onRemove,onCheckout})=>{
         )}
       </div>
       {cart.length>0&&(
-        <div style={{position:"fixed",bottom:0,left:0,right:0,padding:"10px 16px",background:C.white,boxShadow:"0 -2px 12px rgba(0,0,0,0.1)",maxWidth:480,margin:"0 auto",boxSizing:"border-box"}}>
+        <div style={{position:"fixed",bottom:65,left:0,right:0,padding:"10px 16px",background:C.white,boxShadow:"0 -2px 12px rgba(0,0,0,0.1)",maxWidth:480,margin:"0 auto",boxSizing:"border-box",zIndex:101}}>
           <Btn full v="primary" onClick={onCheckout}>⚡ Bayar Sekarang · Rp {fmt(total)}</Btn>
         </div>
       )}
@@ -2238,7 +2238,7 @@ const ProfilScreen=({onNav,onBack})=>{
 const BottomNav=({active,onChange,chatUnread,notifUnread})=>{
   const tabs=[
     {k:"home",em:"🏠",l:"Beranda"},
-    {k:"market",em:"🛒",l:"Market"},
+    {k:"market",em:"🏪",l:"Market"},
     {k:"jual",em:"📤",l:"Jual",fab:true},
     {k:"chat",em:"💬",l:"Chat"},
     {k:"profil",em:"👤",l:"Profil"},
